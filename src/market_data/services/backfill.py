@@ -43,10 +43,17 @@ class BackfillService:
         # Check if we have existing data - resume from there
         latest = self.storage.get_latest_candle_time("bitfinex", symbol, timeframe)
         if latest and not start:
+            # Ensure timezone awareness for comparison
+            if latest.tzinfo is None:
+                latest = latest.replace(tzinfo=timezone.utc)
             start = latest
             logger.info(f"Resuming backfill from {start} for {symbol}/{timeframe}")
         elif not start:
             start = end - timedelta(days=days)
+        
+        # Ensure start has timezone
+        if start.tzinfo is None:
+            start = start.replace(tzinfo=timezone.utc)
 
         # Create job record
         job = IngestionJob(

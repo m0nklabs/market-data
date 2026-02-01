@@ -138,11 +138,19 @@ class GapRepairService:
                 f"from {gap.gap_start} to {gap.gap_end}"
             )
 
+            # Ensure timezone awareness for gap times from DB
+            gap_start = gap.gap_start
+            gap_end = gap.gap_end
+            if gap_start.tzinfo is None:
+                gap_start = gap_start.replace(tzinfo=timezone.utc)
+            if gap_end.tzinfo is None:
+                gap_end = gap_end.replace(tzinfo=timezone.utc)
+
             candles = self.exchange.fetch_candles(
                 gap.symbol,
                 gap.timeframe,
-                gap.gap_start,
-                gap.gap_end,
+                gap_start,
+                gap_end,
             )
 
             if candles:

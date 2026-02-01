@@ -31,18 +31,29 @@ BASE_URL = "https://api-pub.bitfinex.com/v2"
 
 
 class BitfinexAdapter(ExchangeAdapter):
-    """Bitfinex REST API adapter for candle data."""
+    """Bitfinex REST API adapter for candle data.
+    
+    Rate Limits (from Bitfinex docs):
+    - REST API: 10-90 requests per minute depending on endpoint
+    - If rate limited: IP blocked for 60 seconds
+    
+    We use conservative throttling (1.5s between requests = ~40 req/min)
+    to stay well within limits.
+    """
 
     def __init__(
         self,
         max_retries: int = 5,
         initial_backoff: float = 1.0,
-        max_backoff: float = 30.0,
+        max_backoff: float = 60.0,  # Match Bitfinex block duration
+        request_delay: float = 1.5,  # Seconds between requests (~40 req/min)
     ):
         self.max_retries = max_retries
         self.initial_backoff = initial_backoff
         self.max_backoff = max_backoff
+        self.request_delay = request_delay
         self._client = httpx.Client(timeout=30.0)
+        self._last_request_time: float = 0
 
     def _api_timeframe(self, timeframe: str) -> str:
         """Convert timeframe to API format."""
@@ -53,16 +64,28 @@ class BitfinexAdapter(ExchangeAdapter):
         return TIMEFRAMES.get(timeframe, ("1h", timedelta(hours=1)))[1]
 
     def _request_with_retry(self, url: str, params: dict[str, Any] | None = None) -> Any:
-        """Make request with exponential backoff retry."""
+        """Make request with rate limiting and exponential backoff retry.
+        
+        Implements:
+        - Pre-request delay to stay within rate limits
+        - Exponential backoff on 429 responses
+        - Retry on transient errors
+        """
         backoff = self.initial_backoff
 
         for attempt in range(self.max_retries):
+            # Rate limiting: wait between requests
+            elapsed = time.time() - self._last_request_time
+            if elapsed < self.request_delay:
+                time.sleep(self.request_delay - elapsed)
+            
             try:
+                self._last_request_time = time.time()
                 response = self._client.get(url, params=params)
                 
                 if response.status_code == 429:
-                    # Rate limited
-                    logger.warning(f"Rate limited, backing off {backoff}s")
+                    # Rate limited - back off significantly
+                    logger.warning(f"Rate limited (429), backing off {backoff}s (attempt {attempt + 1})")
                     time.sleep(backoff)
                     backoff = min(backoff * 2, self.max_backoff)
                     continue
@@ -151,8 +174,8 @@ class BitfinexAdapter(ExchangeAdapter):
             else:
                 break
 
-            # Small delay between paginated requests
-            time.sleep(0.5)
+            # Small delay between paginated requests (in addition to base throttle)
+            time.sleep(0.2)
 
         return all_candles
 

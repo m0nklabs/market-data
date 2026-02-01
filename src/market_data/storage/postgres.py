@@ -168,10 +168,11 @@ class PostgresStorage:
     # Gap management
     def save_gap(self, gap: CandleGap) -> int:
         """Save detected gap. Returns gap ID."""
+        # Use existing schema column names: expected_open_time, expected_close_time
         sql = text("""
-            INSERT INTO candle_gaps (exchange, symbol, timeframe, gap_start, gap_end, detected_at)
-            VALUES (:exchange, :symbol, :timeframe, :gap_start, :gap_end, :detected_at)
-            ON CONFLICT (exchange, symbol, timeframe, gap_start, gap_end) DO NOTHING
+            INSERT INTO candle_gaps (exchange, symbol, timeframe, expected_open_time, expected_close_time, detected_at)
+            VALUES (:exchange, :symbol, :timeframe, :expected_open_time, :expected_close_time, :detected_at)
+            ON CONFLICT (exchange, symbol, timeframe, expected_open_time) DO NOTHING
             RETURNING id
         """)
 
@@ -180,8 +181,8 @@ class PostgresStorage:
                 "exchange": gap.exchange,
                 "symbol": gap.symbol,
                 "timeframe": gap.timeframe,
-                "gap_start": gap.gap_start,
-                "gap_end": gap.gap_end,
+                "expected_open_time": gap.gap_start,
+                "expected_close_time": gap.gap_end,
                 "detected_at": gap.detected_at,
             })
             conn.commit()
@@ -208,11 +209,12 @@ class PostgresStorage:
             conditions.append("timeframe = :timeframe")
             params["timeframe"] = timeframe
 
+        # Use existing schema column names: expected_open_time, expected_close_time
         sql = text(f"""
-            SELECT id, exchange, symbol, timeframe, gap_start, gap_end, detected_at, repaired_at
+            SELECT id, exchange, symbol, timeframe, expected_open_time, expected_close_time, detected_at, repaired_at
             FROM candle_gaps
             WHERE {" AND ".join(conditions)}
-            ORDER BY gap_start ASC
+            ORDER BY expected_open_time ASC
         """)
 
         with self.engine.connect() as conn:
