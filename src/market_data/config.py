@@ -87,13 +87,16 @@ class Settings(BaseSettings):
     )
     ws_max_subscriptions_per_connection: int = Field(
         default=25,
-                default=6.0,
-                description="Seconds between API requests (6.0 ≈ 10 req/min; safer default for candles endpoints)",
+        description=(
+            "Max candle subscriptions per single WebSocket connection. "
+            "Bitfinex enforces a subscribe limit; sharding across multiple connections avoids this."
+        ),
+    )
 
-    # Rate limiting (Bitfinex: 10-90 req/min, conservative = 30 req/min)
+    # Rate limiting (Bitfinex: 10-90 req/min depending on endpoint; candles can be low)
     rate_limit_delay: float = Field(
-        default=2.0,
-        description="Seconds between API requests (2.0 = 30 req/min, safe for Bitfinex 10-90 limit)",
+        default=6.0,
+        description="Seconds between API requests (6.0 ≈ 10 req/min; safer default for candles endpoints)",
     )
     rate_limit_max_retries: int = Field(
         default=10,
@@ -102,14 +105,14 @@ class Settings(BaseSettings):
     rate_limit_initial_backoff: float = Field(
         default=2.0,
         description="Initial backoff seconds on 429 error",
-            rate_limit_min_backoff_seconds: float = Field(
-                default=60.0,
-                description="Minimum backoff seconds after a 429 (Bitfinex can block IP for ~60s)",
-            )
+    )
+    rate_limit_min_backoff_seconds: float = Field(
+        default=60.0,
+        description="Minimum backoff seconds after a 429 (Bitfinex can block IP for ~60s)",
     )
     rate_limit_max_backoff: float = Field(
         default=120.0,
-        description="Maximum backoff seconds (Bitfinex blocks for 60s on limit)",
+        description="Maximum backoff seconds",
     )
 
     # Data retention (days per timeframe)
