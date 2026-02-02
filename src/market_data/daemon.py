@@ -7,13 +7,16 @@ import logging
 import signal
 import sys
 import threading
+from collections.abc import Iterable
 from datetime import datetime, timezone
 
 from market_data.api.main import run_api
 from market_data.config import settings
+from market_data.exchanges.bitfinex_ws import BitfinexCandleWSClient, CandleSubscription
 from market_data.services.backfill import BackfillService
 from market_data.services.gap_repair import GapRepairService
 from market_data.storage.postgres import PostgresStorage
+from market_data.types import Candle
 
 # Configure logging
 logging.basicConfig(
@@ -33,6 +36,8 @@ class MarketDataDaemon:
         self.gap_repair_service = GapRepairService(self.storage)
         self._running = False
         self._api_thread: threading.Thread | None = None
+        self._ws_client: BitfinexCandleWSClient | None = None
+        self._ws_queue: asyncio.Queue[Candle] | None = None
 
     def init_database(self) -> None:
         """Initialize database schema."""
@@ -65,6 +70,103 @@ class MarketDataDaemon:
         total = sum(v for v in results.values() if v > 0)
         logger.info(f"Backfill complete: {total} candles across {len(results)} symbol/timeframes")
 
+    async def run_startup_catchup(self) -> None:
+        """Quick REST catch-up window to avoid falling behind on startup."""
+        if not settings.ws_ingestion_enabled:
+            return
+        if settings.ws_catchup_lookback_minutes <= 0:
+            return
+
+        logger.info(f"Startup catch-up: last {settings.ws_catchup_lookback_minutes} minutes (REST)")
+        loop = asyncio.get_running_loop()
+        results = await loop.run_in_executor(
+            None,
+            self.backfill_service.catchup_recent,
+            settings.ws_catchup_lookback_minutes,
+        )
+        total = sum(v for v in results.values() if v > 0)
+        logger.info(f"Startup catch-up complete: {total} candles")
+
+    def _ws_subscriptions(self) -> list[CandleSubscription]:
+        subs: list[CandleSubscription] = []
+        for symbol in settings.bitfinex_symbols_list:
+            for timeframe in settings.bitfinex_timeframes_list:
+                subs.append(CandleSubscription(symbol=symbol, timeframe=timeframe))
+        return subs
+
+    async def run_ws_ingestion(self) -> None:
+        """Stream realtime candles from Bitfinex WS and persist them."""
+        if not settings.ws_ingestion_enabled:
+            logger.info("WebSocket ingestion disabled")
+            return
+
+        subs = self._ws_subscriptions()
+        if not subs:
+            logger.info("No WS subscriptions configured")
+            return
+
+        self._ws_queue = asyncio.Queue(maxsize=10000)
+
+        dropped = 0
+
+        async def on_candles(candles: list[Candle]) -> None:
+            nonlocal dropped
+            if not self._ws_queue:
+                return
+            for candle in candles:
+                try:
+                    self._ws_queue.put_nowait(candle)
+                except asyncio.QueueFull:
+                    dropped += 1
+                    if dropped % 1000 == 0:
+                        logger.warning(f"WS queue full: dropped {dropped} candles")
+
+        self._ws_client = BitfinexCandleWSClient(
+            subscriptions=subs,
+            on_candles=on_candles,
+            reconnect_initial_backoff=settings.ws_reconnect_initial_backoff,
+            reconnect_max_backoff=settings.ws_reconnect_max_backoff,
+        )
+
+        persist_task = asyncio.create_task(self._run_ws_persist_loop())
+        try:
+            await self._ws_client.run()
+        finally:
+            persist_task.cancel()
+
+    async def _run_ws_persist_loop(self) -> None:
+        if not self._ws_queue:
+            return
+
+        batch: list[Candle] = []
+        batch_size = max(1, settings.ws_save_batch_size)
+        flush_seconds = max(0.2, settings.ws_save_flush_seconds)
+        loop = asyncio.get_running_loop()
+
+        while self._running:
+            try:
+                candle = await asyncio.wait_for(self._ws_queue.get(), timeout=flush_seconds)
+                batch.append(candle)
+                if len(batch) >= batch_size:
+                    to_save = batch
+                    batch = []
+                    await loop.run_in_executor(None, self.storage.save_candles, to_save)
+            except TimeoutError:
+                if batch:
+                    to_save = batch
+                    batch = []
+                    await loop.run_in_executor(None, self.storage.save_candles, to_save)
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"WS persist error: {e}")
+
+        if batch:
+            try:
+                await loop.run_in_executor(None, self.storage.save_candles, batch)
+            except Exception as e:
+                logger.error(f"Final WS persist flush failed: {e}")
+
     async def run_gap_repair_loop(self) -> None:
         """Periodic gap detection and repair."""
         interval = settings.gap_repair_interval_minutes * 60
@@ -94,8 +196,7 @@ class MarketDataDaemon:
 
     async def run_update_loop(self) -> None:
         """Periodic incremental updates (fetch latest candles)."""
-        # Update every minute
-        interval = 60
+        interval = max(10, int(settings.update_interval_seconds))
         
         while self._running:
             try:
@@ -157,12 +258,21 @@ class MarketDataDaemon:
         
         # Start API server
         self.start_api()
-        
-        # Run initial backfill
-        await self.run_backfill()
+
+        # Start realtime WS ingestion early (prevents new gaps).
+        ws_task = asyncio.create_task(self.run_ws_ingestion())
+
+        # Quick startup catch-up (REST) to avoid falling behind while long backfills run.
+        catchup_task = asyncio.create_task(self.run_startup_catchup())
+
+        # Run initial backfill (can be long); do not block startup.
+        backfill_task = asyncio.create_task(self.run_backfill())
         
         # Start background tasks
-        tasks = [
+        tasks: list[asyncio.Task] = [
+            ws_task,
+            catchup_task,
+            backfill_task,
             asyncio.create_task(self.run_gap_repair_loop()),
             asyncio.create_task(self.run_update_loop()),
             asyncio.create_task(self.run_cleanup_loop()),
@@ -178,6 +288,8 @@ class MarketDataDaemon:
     def stop(self) -> None:
         """Stop the daemon."""
         self._running = False
+        if self._ws_client is not None:
+            self._ws_client.stop()
         logger.info("Stop signal received")
 
 

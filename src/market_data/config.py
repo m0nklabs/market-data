@@ -40,9 +40,39 @@ class Settings(BaseSettings):
         default=60,
         description="Interval between gap repair runs",
     )
+    update_interval_seconds: int = Field(
+        default=60,
+        description="Interval between incremental update runs (REST latest candles)",
+    )
     health_check_interval_seconds: int = Field(
         default=30,
         description="Interval between health checks",
+    )
+
+    # Realtime WebSocket ingestion
+    ws_ingestion_enabled: bool = Field(
+        default=True,
+        description="Enable Bitfinex public WebSocket candle ingestion to prevent new gaps",
+    )
+    ws_catchup_lookback_minutes: int = Field(
+        default=180,
+        description="On startup, fetch last N minutes of candles via REST (per symbol/timeframe) to catch up",
+    )
+    ws_reconnect_initial_backoff: float = Field(
+        default=1.0,
+        description="Initial reconnect backoff seconds for WebSocket",
+    )
+    ws_reconnect_max_backoff: float = Field(
+        default=60.0,
+        description="Maximum reconnect backoff seconds for WebSocket",
+    )
+    ws_save_batch_size: int = Field(
+        default=200,
+        description="Batch size when persisting realtime candles",
+    )
+    ws_save_flush_seconds: float = Field(
+        default=2.0,
+        description="Flush interval for persisting realtime candles",
     )
 
     # Rate limiting (Bitfinex: 10-90 req/min, conservative = 30 req/min)

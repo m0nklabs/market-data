@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timedelta, timezone
+from math import ceil
 
 from market_data.config import settings
 from market_data.exchanges.base import ExchangeAdapter
-from market_data.exchanges.bitfinex import BitfinexAdapter
+from market_data.exchanges.bitfinex import BitfinexAdapter, TIMEFRAMES
 from market_data.storage.postgres import PostgresStorage
 from market_data.types import IngestionJob
 
@@ -143,6 +144,38 @@ class BackfillService:
                         results[key] = 0
                 except Exception as e:
                     logger.error(f"Failed to update {key}: {e}")
+                    results[key] = -1
+
+        return results
+
+    def catchup_recent(self, lookback_minutes: int) -> dict[str, int]:
+        """Catch up recent candles via REST.
+
+        This is designed to be fast and prevent the system from falling behind on startup,
+        especially while longer backfills are still running.
+
+        Returns dict of symbol/timeframe -> saved candle count.
+        """
+        lookback_minutes = max(1, lookback_minutes)
+        results: dict[str, int] = {}
+
+        for symbol in settings.bitfinex_symbols_list:
+            for timeframe in settings.bitfinex_timeframes_list:
+                key = f"{symbol}/{timeframe}"
+                try:
+                    delta = TIMEFRAMES.get(timeframe, ("1h", timedelta(hours=1)))[1]
+                    delta_seconds = max(1.0, delta.total_seconds())
+                    lookback_seconds = lookback_minutes * 60
+                    # Add a small safety margin so we include the most recent partial candle.
+                    limit = int(min(2000, ceil(lookback_seconds / delta_seconds) + 5))
+
+                    candles = self.exchange.fetch_latest_candles(symbol, timeframe, limit=limit)
+                    saved = self.storage.save_candles(candles)
+                    results[key] = saved
+                    if saved > 0:
+                        logger.info(f"Catch-up saved {saved} candles for {key} (limit={limit})")
+                except Exception as e:
+                    logger.error(f"Failed catch-up for {key}: {e}")
                     results[key] = -1
 
         return results

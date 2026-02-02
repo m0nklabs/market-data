@@ -46,6 +46,14 @@ BACKFILL_ON_STARTUP=true
 BACKFILL_DAYS=365
 GAP_REPAIR_INTERVAL_MINUTES=60
 UPDATE_INTERVAL_SECONDS=60
+
+# Realtime (Bitfinex public WebSocket)
+WS_INGESTION_ENABLED=true
+WS_CATCHUP_LOOKBACK_MINUTES=180
+WS_RECONNECT_INITIAL_BACKOFF=1.0
+WS_RECONNECT_MAX_BACKOFF=60.0
+WS_SAVE_BATCH_SIZE=200
+WS_SAVE_FLUSH_SECONDS=2.0
 ```
 
 ## API Endpoints
@@ -83,6 +91,7 @@ market-data/
 │   ├── exchanges/        # Exchange adapters
 │   │   ├── base.py       # Abstract interface
 │   │   └── bitfinex.py   # Bitfinex implementation
+│   │   └── bitfinex_ws.py # Bitfinex realtime candle ingestion
 │   ├── services/         # Business logic
 │   │   ├── backfill.py   # Historical data fetching
 │   │   └── gap_repair.py # Gap detection & repair
