@@ -74,6 +74,10 @@ class Settings(BaseSettings):
         default=2.0,
         description="Flush interval for persisting realtime candles",
     )
+    ws_max_subscriptions_per_connection: int = Field(
+        default=25,
+        description="Maximum number of candle subscriptions per Bitfinex WS connection (avoid subscribe limit)",
+    )
 
     # Rate limiting (Bitfinex: 10-90 req/min, conservative = 30 req/min)
     rate_limit_delay: float = Field(

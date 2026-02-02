@@ -36,7 +36,7 @@ class MarketDataDaemon:
         self.gap_repair_service = GapRepairService(self.storage)
         self._running = False
         self._api_thread: threading.Thread | None = None
-        self._ws_client: BitfinexCandleWSClient | None = None
+        self._ws_clients: list[BitfinexCandleWSClient] = []
         self._ws_queue: asyncio.Queue[Candle] | None = None
 
     def init_database(self) -> None:
@@ -121,16 +121,29 @@ class MarketDataDaemon:
                     if dropped % 1000 == 0:
                         logger.warning(f"WS queue full: dropped {dropped} candles")
 
-        self._ws_client = BitfinexCandleWSClient(
-            subscriptions=subs,
-            on_candles=on_candles,
-            reconnect_initial_backoff=settings.ws_reconnect_initial_backoff,
-            reconnect_max_backoff=settings.ws_reconnect_max_backoff,
+        max_per_conn = max(1, int(settings.ws_max_subscriptions_per_connection))
+        chunks: list[list[CandleSubscription]] = [
+            subs[i : i + max_per_conn] for i in range(0, len(subs), max_per_conn)
+        ]
+
+        self._ws_clients = [
+            BitfinexCandleWSClient(
+                subscriptions=chunk,
+                on_candles=on_candles,
+                reconnect_initial_backoff=settings.ws_reconnect_initial_backoff,
+                reconnect_max_backoff=settings.ws_reconnect_max_backoff,
+            )
+            for chunk in chunks
+        ]
+
+        logger.info(
+            f"Starting WS ingestion: {len(subs)} subscriptions across {len(self._ws_clients)} connections "
+            f"(max_per_conn={max_per_conn})"
         )
 
         persist_task = asyncio.create_task(self._run_ws_persist_loop())
         try:
-            await self._ws_client.run()
+            await asyncio.gather(*(client.run() for client in self._ws_clients))
         finally:
             persist_task.cancel()
 
@@ -288,8 +301,8 @@ class MarketDataDaemon:
     def stop(self) -> None:
         """Stop the daemon."""
         self._running = False
-        if self._ws_client is not None:
-            self._ws_client.stop()
+        for client in self._ws_clients:
+            client.stop()
         logger.info("Stop signal received")
 
 
