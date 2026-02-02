@@ -47,6 +47,10 @@ class Settings(BaseSettings):
         default=10,
         description="Maximum number of gaps to repair per maintenance cycle (0 = unlimited)",
     )
+    gap_detection_interval_minutes: int = Field(
+        default=60,
+        description="Interval between expensive gap detection scans (minutes)",
+    )
     gap_repair_interval_minutes: int = Field(
         default=60,
         description="Interval between gap repair runs",

@@ -182,17 +182,34 @@ class MarketDataDaemon:
 
     async def run_gap_repair_loop(self) -> None:
         """Periodic gap detection and repair."""
-        interval = settings.gap_repair_interval_minutes * 60
+        interval = max(10, int(settings.gap_repair_interval_minutes * 60))
+        detection_interval = max(60, int(settings.gap_detection_interval_minutes * 60))
+        last_detection_ts: float | None = None
         
         while self._running:
             try:
                 logger.info("Running gap detection and repair...")
                 
                 loop = asyncio.get_event_loop()
-                result = await loop.run_in_executor(
+                now_ts = loop.time()
+
+                new_gaps = 0
+                if last_detection_ts is None or (now_ts - last_detection_ts) >= detection_interval:
+                    new_gaps = await loop.run_in_executor(
+                        None,
+                        self.gap_repair_service.detect_and_save_gaps,
+                    )
+                    last_detection_ts = now_ts
+
+                repairs = await loop.run_in_executor(
                     None,
-                    self.gap_repair_service.run_maintenance,
+                    self.gap_repair_service.repair_all_gaps,
                 )
+                result = {
+                    "new_gaps_detected": new_gaps,
+                    "gaps_repaired": len([v for v in repairs.values() if v >= 0]),
+                    "repair_failures": len([v for v in repairs.values() if v < 0]),
+                }
                 
                 logger.info(
                     f"Gap maintenance complete: "
