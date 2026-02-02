@@ -1,0 +1,22 @@
+[Unit]
+Description=Market Data Ingestion Service
+After=network.target postgresql.service docker.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=flip
+Group=flip
+WorkingDirectory=/home/flip/market-data
+Environment="PATH=/home/flip/market-data/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/flip/market-data/.venv/bin/python -m market_data.daemon
+Restart=always
+RestartSec=30
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=market-data
+
+[Install]
+WantedBy=multi-user.target

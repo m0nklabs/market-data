@@ -362,3 +362,35 @@ class PostgresStorage:
                 for row in rows
             ]
         }
+
+    def cleanup_old_candles(self, retention_days: dict[str, int]) -> dict[str, int]:
+        """Delete candles older than retention period per timeframe.
+        
+        Args:
+            retention_days: Dict mapping timeframe to max age in days
+                           e.g. {"1m": 30, "1h": 365, "4h": 730, "1d": 1825}
+        
+        Returns:
+            Dict with deleted count per timeframe
+        """
+        deleted = {}
+        now = datetime.now(timezone.utc)
+        
+        for timeframe, days in retention_days.items():
+            cutoff = now - __import__('datetime').timedelta(days=days)
+            
+            sql = text("""
+                DELETE FROM candles 
+                WHERE timeframe = :timeframe 
+                AND open_time < :cutoff
+            """)
+            
+            with self.engine.connect() as conn:
+                result = conn.execute(sql, {"timeframe": timeframe, "cutoff": cutoff})
+                conn.commit()
+                deleted[timeframe] = result.rowcount
+                
+            if deleted[timeframe] > 0:
+                logger.info(f"Cleaned up {deleted[timeframe]} old {timeframe} candles (>{days} days)")
+        
+        return deleted

@@ -33,27 +33,25 @@ BASE_URL = "https://api-pub.bitfinex.com/v2"
 class BitfinexAdapter(ExchangeAdapter):
     """Bitfinex REST API adapter for candle data.
     
-    Rate Limits (from Bitfinex docs):
+    Rate Limits (from Bitfinex docs - https://docs.bitfinex.com/docs/requirements-and-limitations):
     - REST API: 10-90 requests per minute depending on endpoint
     - If rate limited: IP blocked for 60 seconds
+    - No difference between public/authenticated for rate limits
     
-    We use conservative throttling (1.5s between requests = ~40 req/min)
-    to stay well within limits.
+    Uses GLOBAL rate limiter shared across all instances/threads.
     """
 
-    def __init__(
-        self,
-        max_retries: int = 5,
-        initial_backoff: float = 1.0,
-        max_backoff: float = 60.0,  # Match Bitfinex block duration
-        request_delay: float = 1.5,  # Seconds between requests (~40 req/min)
-    ):
-        self.max_retries = max_retries
-        self.initial_backoff = initial_backoff
-        self.max_backoff = max_backoff
-        self.request_delay = request_delay
+    def __init__(self):
+        # Import here to avoid circular imports
+        from market_data.config import settings
+        from market_data.rate_limiter import get_rate_limiter
+        
+        self._rate_limiter = get_rate_limiter()
         self._client = httpx.Client(timeout=30.0)
-        self._last_request_time: float = 0
+        
+        # Keep local copies for retry logic
+        self.max_retries = settings.rate_limit_max_retries
+        self.max_backoff = settings.rate_limit_max_backoff
 
     def _api_timeframe(self, timeframe: str) -> str:
         """Convert timeframe to API format."""
@@ -64,32 +62,31 @@ class BitfinexAdapter(ExchangeAdapter):
         return TIMEFRAMES.get(timeframe, ("1h", timedelta(hours=1)))[1]
 
     def _request_with_retry(self, url: str, params: dict[str, Any] | None = None) -> Any:
-        """Make request with rate limiting and exponential backoff retry.
+        """Make request with global rate limiting and exponential backoff retry.
         
-        Implements:
-        - Pre-request delay to stay within rate limits
-        - Exponential backoff on 429 responses
-        - Retry on transient errors
+        Uses GLOBAL rate limiter to coordinate across all threads/tasks.
         """
-        backoff = self.initial_backoff
-
         for attempt in range(self.max_retries):
-            # Rate limiting: wait between requests
-            elapsed = time.time() - self._last_request_time
-            if elapsed < self.request_delay:
-                time.sleep(self.request_delay - elapsed)
+            # Wait for rate limit slot (thread-safe, global)
+            self._rate_limiter.wait_for_slot()
             
             try:
-                self._last_request_time = time.time()
                 response = self._client.get(url, params=params)
                 
                 if response.status_code == 429:
-                    # Rate limited - back off significantly
-                    logger.warning(f"Rate limited (429), backing off {backoff}s (attempt {attempt + 1})")
+                    # Rate limited - record and back off
+                    backoff = self._rate_limiter.record_rate_limit()
+                    stats = self._rate_limiter.get_stats()
+                    logger.warning(
+                        f"Rate limited (429), backing off {backoff:.0f}s "
+                        f"(attempt {attempt + 1}/{self.max_retries}, "
+                        f"consecutive: {stats['consecutive_rate_limits']})"
+                    )
                     time.sleep(backoff)
-                    backoff = min(backoff * 2, self.max_backoff)
                     continue
 
+                # Success - record it
+                self._rate_limiter.record_success()
                 response.raise_for_status()
                 return response.json()
 
@@ -97,17 +94,17 @@ class BitfinexAdapter(ExchangeAdapter):
                 if attempt == self.max_retries - 1:
                     raise
                 logger.warning(f"HTTP error {e.response.status_code}, retry {attempt + 1}")
-                time.sleep(backoff)
-                backoff = min(backoff * 2, self.max_backoff)
+                time.sleep(2.0)
 
             except httpx.RequestError as e:
                 if attempt == self.max_retries - 1:
                     raise
                 logger.warning(f"Request error: {e}, retry {attempt + 1}")
-                time.sleep(backoff)
-                backoff = min(backoff * 2, self.max_backoff)
+                time.sleep(2.0)
 
-        raise RuntimeError(f"Failed after {self.max_retries} retries")
+        # After max retries, log and return None instead of raising
+        logger.error(f"Failed after {self.max_retries} retries, will retry later")
+        return None
 
     def _parse_candle(
         self,
@@ -193,6 +190,9 @@ class BitfinexAdapter(ExchangeAdapter):
         params = {"limit": limit, "sort": -1}  # newest first
 
         data = self._request_with_retry(url, params)
+        
+        if not data:
+            return []
 
         candles = [
             self._parse_candle(item, "bitfinex", symbol, timeframe)

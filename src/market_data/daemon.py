@@ -114,6 +114,34 @@ class MarketDataDaemon:
 
             await asyncio.sleep(interval)
 
+    async def run_cleanup_loop(self) -> None:
+        """Periodic cleanup of old candles based on retention policy."""
+        # Run cleanup once per day (first run after 1 hour)
+        await asyncio.sleep(3600)
+        
+        while self._running:
+            try:
+                logger.info("Running data retention cleanup...")
+                
+                loop = asyncio.get_event_loop()
+                deleted = await loop.run_in_executor(
+                    None,
+                    self.storage.cleanup_old_candles,
+                    settings.retention_days,
+                )
+                
+                total = sum(deleted.values())
+                if total > 0:
+                    logger.info(f"Cleanup complete: deleted {total} old candles")
+                else:
+                    logger.info("Cleanup complete: no old candles to delete")
+
+            except Exception as e:
+                logger.error(f"Cleanup error: {e}")
+
+            # Run once per day
+            await asyncio.sleep(86400)
+
     async def run(self) -> None:
         """Main daemon loop."""
         self._running = True
@@ -137,6 +165,7 @@ class MarketDataDaemon:
         tasks = [
             asyncio.create_task(self.run_gap_repair_loop()),
             asyncio.create_task(self.run_update_loop()),
+            asyncio.create_task(self.run_cleanup_loop()),
         ]
         
         logger.info("Daemon running. Press Ctrl+C to stop.")
