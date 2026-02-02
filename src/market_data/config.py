@@ -31,21 +31,21 @@ class Settings(BaseSettings):
     backfill_on_startup: bool = Field(
         default=True,
         description="Run backfill on daemon startup",
-            rest_update_enabled: bool = Field(
-                default=False,
-                description=(
-                    "Enable periodic REST update_latest loop. When WS ingestion is enabled, this is usually redundant and can "
-                    "cause 429s due to high request volume."
-                ),
-            )
+    )
+    rest_update_enabled: bool = Field(
+        default=False,
+        description=(
+            "Enable periodic REST update_latest loop. When WS ingestion is enabled, this is usually redundant and can "
+            "cause 429s due to high request volume."
+        ),
     )
     backfill_days: int = Field(
         default=365,
         description="Days of historical data to backfill",
-            gap_repair_max_repairs_per_run: int = Field(
-                default=10,
-                description="Maximum number of gaps to repair per maintenance cycle (0 = unlimited)",
-            )
+    )
+    gap_repair_max_repairs_per_run: int = Field(
+        default=10,
+        description="Maximum number of gaps to repair per maintenance cycle (0 = unlimited)",
     )
     gap_repair_interval_minutes: int = Field(
         default=60,
