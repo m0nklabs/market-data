@@ -190,6 +190,10 @@ class GapRepairService:
         gaps = self.storage.get_unrepaired_gaps()
         results = {}
 
+        max_repairs = int(settings.gap_repair_max_repairs_per_run)
+        if max_repairs > 0:
+            gaps = gaps[:max_repairs]
+
         for gap in gaps:
             try:
                 count = self.repair_gap(gap)

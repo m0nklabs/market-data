@@ -31,10 +31,21 @@ class Settings(BaseSettings):
     backfill_on_startup: bool = Field(
         default=True,
         description="Run backfill on daemon startup",
+            rest_update_enabled: bool = Field(
+                default=False,
+                description=(
+                    "Enable periodic REST update_latest loop. When WS ingestion is enabled, this is usually redundant and can "
+                    "cause 429s due to high request volume."
+                ),
+            )
     )
     backfill_days: int = Field(
         default=365,
         description="Days of historical data to backfill",
+            gap_repair_max_repairs_per_run: int = Field(
+                default=10,
+                description="Maximum number of gaps to repair per maintenance cycle (0 = unlimited)",
+            )
     )
     gap_repair_interval_minutes: int = Field(
         default=60,
@@ -76,8 +87,8 @@ class Settings(BaseSettings):
     )
     ws_max_subscriptions_per_connection: int = Field(
         default=25,
-        description="Maximum number of candle subscriptions per Bitfinex WS connection (avoid subscribe limit)",
-    )
+                default=6.0,
+                description="Seconds between API requests (6.0 ≈ 10 req/min; safer default for candles endpoints)",
 
     # Rate limiting (Bitfinex: 10-90 req/min, conservative = 30 req/min)
     rate_limit_delay: float = Field(
@@ -91,6 +102,10 @@ class Settings(BaseSettings):
     rate_limit_initial_backoff: float = Field(
         default=2.0,
         description="Initial backoff seconds on 429 error",
+            rate_limit_min_backoff_seconds: float = Field(
+                default=60.0,
+                description="Minimum backoff seconds after a 429 (Bitfinex can block IP for ~60s)",
+            )
     )
     rate_limit_max_backoff: float = Field(
         default=120.0,

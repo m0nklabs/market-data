@@ -209,6 +209,9 @@ class MarketDataDaemon:
 
     async def run_update_loop(self) -> None:
         """Periodic incremental updates (fetch latest candles)."""
+        if not settings.rest_update_enabled:
+            logger.info("REST update loop disabled")
+            return
         interval = max(10, int(settings.update_interval_seconds))
         
         while self._running:

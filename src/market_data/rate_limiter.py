@@ -54,6 +54,7 @@ class GlobalRateLimiter:
         self.max_retries = settings.rate_limit_max_retries
         self.initial_backoff = settings.rate_limit_initial_backoff
         self.max_backoff = settings.rate_limit_max_backoff
+        self.min_backoff_on_429 = settings.rate_limit_min_backoff_seconds
         
         self._initialized = True
         logger.info(
@@ -87,7 +88,8 @@ class GlobalRateLimiter:
             self._consecutive_rate_limits += 1
             # Exponential backoff based on consecutive failures
             backoff = self.initial_backoff * (2 ** min(self._consecutive_rate_limits, 6))
-            return min(backoff, self.max_backoff)
+            backoff = min(backoff, self.max_backoff)
+            return max(self.min_backoff_on_429, backoff)
     
     def get_stats(self) -> dict[str, Any]:
         """Get current rate limiter statistics."""
