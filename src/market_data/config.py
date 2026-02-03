@@ -47,6 +47,12 @@ class Settings(BaseSettings):
         default=10,
         description="Maximum number of gaps to repair per maintenance cycle (0 = unlimited)",
     )
+    gap_detection_max_open_gaps: int = Field(
+        default=0,
+        description=(
+            "If >0, skip gap detection when unrepaired gaps exceed this threshold to allow backlog to drain."
+        ),
+    )
     gap_detection_interval_minutes: int = Field(
         default=60,
         description="Interval between expensive gap detection scans (minutes)",

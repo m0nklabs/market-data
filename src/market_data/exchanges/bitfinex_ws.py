@@ -169,8 +169,9 @@ class BitfinexCandleWSClient:
 
                 # Snapshot: [chanId, [ [..], [..] ]]
                 if isinstance(payload, list) and payload and isinstance(payload[0], list):
-                    candles = [parse_ws_candle(item, sub.symbol, sub.timeframe) for item in payload]
-                    await self._emit(candles)
+                    latest_item = max(payload, key=lambda item: item[0])
+                    candle = parse_ws_candle(latest_item, sub.symbol, sub.timeframe)
+                    await self._emit([candle])
                     continue
 
                 # Update: [chanId, [..]]

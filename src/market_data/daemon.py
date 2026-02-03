@@ -192,14 +192,26 @@ class MarketDataDaemon:
                 
                 loop = asyncio.get_event_loop()
                 now_ts = loop.time()
+                open_gaps = await loop.run_in_executor(
+                    None,
+                    self.storage.count_unrepaired_gaps,
+                )
 
                 new_gaps = 0
-                if last_detection_ts is None or (now_ts - last_detection_ts) >= detection_interval:
-                    new_gaps = await loop.run_in_executor(
-                        None,
-                        self.gap_repair_service.detect_and_save_gaps,
-                    )
-                    last_detection_ts = now_ts
+                detection_due = last_detection_ts is None or (now_ts - last_detection_ts) >= detection_interval
+                backlog_limit = int(settings.gap_detection_max_open_gaps)
+                if detection_due:
+                    if backlog_limit > 0 and open_gaps >= backlog_limit:
+                        logger.info(
+                            "Skipping gap detection due to backlog: "
+                            f"open_gaps={open_gaps} >= limit={backlog_limit}"
+                        )
+                    else:
+                        new_gaps = await loop.run_in_executor(
+                            None,
+                            self.gap_repair_service.detect_and_save_gaps,
+                        )
+                        last_detection_ts = now_ts
 
                 repairs = await loop.run_in_executor(
                     None,
@@ -215,7 +227,8 @@ class MarketDataDaemon:
                     f"Gap maintenance complete: "
                     f"{result['new_gaps_detected']} new gaps, "
                     f"{result['gaps_repaired']} repaired, "
-                    f"{result['repair_failures']} failures"
+                    f"{result['repair_failures']} failures, "
+                    f"open_gaps={open_gaps}"
                 )
 
             except Exception as e:

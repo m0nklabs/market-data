@@ -235,6 +235,38 @@ class PostgresStorage:
             for row in rows
         ]
 
+    def count_unrepaired_gaps(
+        self,
+        exchange: str | None = None,
+        symbol: str | None = None,
+        timeframe: str | None = None,
+    ) -> int:
+        """Count gaps that haven't been repaired."""
+        conditions = ["repaired_at IS NULL"]
+        params: dict = {}
+
+        if exchange:
+            conditions.append("exchange = :exchange")
+            params["exchange"] = exchange
+        if symbol:
+            conditions.append("symbol = :symbol")
+            params["symbol"] = symbol
+        if timeframe:
+            conditions.append("timeframe = :timeframe")
+            params["timeframe"] = timeframe
+
+        sql = text(f"""
+            SELECT COUNT(*)
+            FROM candle_gaps
+            WHERE {" AND ".join(conditions)}
+        """)
+
+        with self.engine.connect() as conn:
+            result = conn.execute(sql, params)
+            row = result.fetchone()
+
+        return row[0] if row else 0
+
     def mark_gap_repaired(self, gap_id: int) -> None:
         """Mark a gap as repaired."""
         sql = text("""
