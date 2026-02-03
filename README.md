@@ -28,6 +28,16 @@ cp .env.example .env
 python -m market_data.daemon
 ```
 
+## Agent Config (MARK1)
+
+This repo keeps Copilot agent definitions in `.github/agents/`.
+
+Canonical MARK1 lives in the sibling repo `../github-copilot-config/agents/MARK1.md` and can be synced into this repo via:
+
+```bash
+./scripts/sync_agents_from_central.sh
+```
+
 ## Configuration
 
 Environment variables (`.env`):
