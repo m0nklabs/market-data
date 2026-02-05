@@ -34,7 +34,7 @@ graph TD
     end
 ```
 
-*Note: “Quant Screener” here refers to the role agent in this architecture, not the QuantAgent framework paper referenced in doc 06.*
+*Note: “Quant Screener” here refers to the role agent in this architecture, not the QuantAgent framework paper referenced in doc 06 (which is cited separately for research context).*
 
 ---
 
