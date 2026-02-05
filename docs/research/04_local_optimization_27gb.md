@@ -12,7 +12,7 @@ Identify the best local model configuration that fits within a 27GB VRAM envelop
 | **Gemma 3 27B** | 27B | 128K | ~25 | VRAM headroom, good speed |
 | **Qwen3-32B** | 32B | 32K–128K | ~30 | Better reasoning quality |
 | DeepSeek-R1-Distill-Qwen-32B | 32B | 32K | ~27 | Reasoning-focused |
-| Qwen3-30B-A3B (MoE) | 30B (3B active) | 262K | ~22 | Very long context |
+| Qwen2.5-30B-A3B (MoE) | 30B (3B active) | 262K | ~22 | Very long context |
 
 ---
 
@@ -73,6 +73,11 @@ From StockBench results, **Qwen3-30B-Think** ranked 6th with low variance (0.12)
 ### For Extended Context (128K+): Use API
 - Local 128K context is impractical with 27GB VRAM
 - Fall back to DeepSeek V3.2 API ($0.32/M) for long-context tasks
+
+---
+
+## Fine-Tuning Option (future)
+Consider fine-tuning a smaller local model (e.g., Qwen3-32B or Phi-4) on crypto-specific signal data. A targeted fine-tune could outperform frontier models on our exact indicators while keeping inference local.
 
 ---
 

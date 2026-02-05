@@ -8,7 +8,7 @@
 | **News / Fundamentals** | **Grok 4 (Web)** | Perplexity Pro | #1 Real-time data fetching |
 | **General Intelligence** | **GPT-5** | Claude Opus 4.5 | #1 Static QA (61.5% acc) |
 | **Finance Reasoning** | **o3** | Gemini 2.0 Flash | #1 Pure Reasoning (83.6 score) |
-| **Trading/TA** | **DeepSeek-R1** | Kimi-K2 | Strongest numerical calc & info extraction |
+| **Trading/TA** | **DeepSeek-R1 (online tasks)** | Kimi-K2 (StockBench) | Online accuracy vs profitability benchmarks |
 | **Budget API** | **DeepSeek V3.2** | Gemini 3 Flash | $0.32/M (DeepSeek) is unbeaten |
 | **Fast + cheap** | **Gemini 3 Flash** | Gemini 3 Pro | 46 score @ $1.13/M |
 | **Local (27GB)** | **Gemma 3 27B** | Qwen3-32B | Best verified local fit |
@@ -19,7 +19,7 @@
 
 | Model | Intelligence | Finance Leaderboard | Trading | Cost ($/M) | Verdict |
 | --- | --- | --- | --- | --- | --- |
-| **DeepSeek-R1** | 🥇 High | **#1 Live/Online** | **Best** | ~$0.55 | **Best for Execution** |
+| **DeepSeek-R1** | 🥇 High | **#1 Live/Online** | **Best** | ≈$0.55 | **Best for Execution** |
 | **Grok 4 (Web)** | 49 | **#1 Search** | Mid | $6.00 | **Top Fundamental/News** |
 | **GPT-5** | 🥇 61.5% Acc | High | Mid | $4.81 | **Top General Intelligence** |
 | **o3-mini** | High | #1 Reasoning | High | $1.10 | **Best Reasoning Value** |
@@ -29,7 +29,9 @@
 | **Kimi-K2** | 47 | Mid | #1 StockBench | $1.20 | Good trading baselines |
 | **DeepSeek V3.2** | 42 | Mid | — | **$0.32** | **Best Budget** |
 | Gemini 3 Flash | 46 | Low | — | $1.13 | Fast volume processor |
-| **Local Gemma 3** | ~25 | — | — | >$0.01 | **Best Privacy** |
+| **Local Gemma 3** | ~25 | — | — | ≈$0.01 | **Best Privacy** |
+
+**Note:** Costs marked with "≈" are approximate and should be updated with current provider pricing.
 
 ---
 
@@ -37,6 +39,9 @@
 
 ### 1. "Live" Performance Matters More Than "Static"
 Benchmarks like **BizFinBench.v2** and **DeepFund** reveal that models excellent at static exams (GPT-5, Claude-3.7) can fail in live trading. **DeepSeek-R1** is currently the only model showing consistent robustness in live/online financial tasks.
+
+### 1b. Reconciling Benchmark Differences
+StockBench emphasizes **profitability in live DJIA trading**, while BizFinBench/DeepFund emphasize **online task accuracy**. It is normal for Kimi-K2 to lead on StockBench while DeepSeek-R1 leads on online tasks; both signals inform different parts of the decision matrix.
 
 ### 2. DeepSeek-R1 is the Reasoning & Execution King
 It leads in "Information Extraction" (crucial for reading news/docs) and "Numerical Calculation" (crucial for TA).

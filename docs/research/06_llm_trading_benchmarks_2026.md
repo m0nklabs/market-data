@@ -23,19 +23,19 @@
 *   **Focus:** Authentic business data from Chinese and U.S. equity markets; includes "online tasks" (live/dynamic).
 *   **Key Metrics:**
     *   **Main Tasks Accuracy:**
-        *   **ChatGPT-5:** 61.5% (Leader)
+    *   **GPT-5:** 61.5% (Leader)
     *   **Online/Live Tasks:**
         *   **DeepSeek-R1:** Outperforms all other commercial LLMs.
 *   **Earlier Version (v1) Stats:**
     *   **Numerical Calculation:** DeepSeek-R1 (64.04), Claude-3.5-Sonnet (63.18).
-    *   **Reasoning:** ChatGPT-o3 (83.58), Gemini-2.0-Flash (81.15).
+    *   **Reasoning:** o3 (83.58), Gemini 2.0 Flash (81.15).
     *   **Information Extraction:** DeepSeek-R1 (71.46) - gap to open-source is huge.
 
 ### DeepFund (Mar 2025 - May 2025)
 *   **Paper:** "Time Travel is Cheating: Going Live with DeepFund for Real-Time Fund Investment Benchmarking"
 *   **Focus:** **Live** fund benchmark to prevent "time travel" (data leakage) in backtests.
 *   **Findings:**
-    *   Even **DeepSeek-V3** and **Claude-3.7-Sonnet** incurred net trading losses in the live environment.
+    *   Even **DeepSeek V3** and **Claude 3.7 Sonnet** incurred net trading losses in the live environment.
     *   Highlights the "reality gap" between backtest performance and live execution.
 
 ### QuantAgent (Sep 2025)
@@ -52,16 +52,21 @@ Based on *BizFinBench.v2* and *DeepFund* results (Early 2026):
 | Rank | Model | Strengths | Weaknesses |
 | :--- | :--- | :--- | :--- |
 | **1** | **DeepSeek-R1** | **#1 in Online/Live Tasks**, **#1 in Information Extraction**, **#1 in Numerical Calculation**. Best for "real world" dynamic usage. | - |
-| **2** | **ChatGPT-5** | **#1 in General Financial QA** (61.5% accuracy). Strongest static knowledge base. | Slightly behind in dynamic online tasks compared to R1. |
-| **3** | **ChatGPT-o3** | **#1 in Reasoning** (83.58). Excellent for logic-heavy tasks. | - |
-| **4** | **Gemini-2.0-Flash** | **#2 in Reasoning** (81.15). Very fast and capable. | - |
-| **5** | **Claude-3.5-Sonnet** | Strong in numerical calc (63.18). | Lagged in some v1 metrics compared to newer models. |
+| **2** | **GPT-5** | **#1 in General Financial QA** (61.5% accuracy). Strongest static knowledge base. | Slightly behind in dynamic online tasks compared to R1. |
+| **3** | **o3** | **#1 in Reasoning** (83.58). Excellent for logic-heavy tasks. | - |
+| **4** | **Gemini 2.0 Flash** | **#2 in Reasoning** (81.15). Very fast and capable. | - |
+| **5** | **Claude 3.5 Sonnet** | Strong in numerical calc (63.18). | Lagged in some v1 metrics compared to newer models. |
+
+**Note:** StockBench profitability rankings can differ from BizFinBench online-task rankings; use both to separate profitability from live-task accuracy.
 
 ## 3. Best for Crypto Technical Analysis
 
 1.  **QuantAgent Framework**: This isn't a single model but a **multi-agent framework** specifically designed for crypto/HFT. It uses specialized agents for patterns and trends.
 2.  **InvestorBench**: Evaluates agents on **Cryptocurrencies** and ETFs.
 3.  **DeepSeek-R1**: Given its dominance in "online tasks" and "numerical calculation" in BizFinBench, it is likely the best raw engine for technical analysis constraints.
+
+## 3b. Crypto Benchmark Coverage Gap
+Most published benchmarks (StockBench, BizFinBench, FinanceArena) focus on equity markets. Crypto markets have 24/7 liquidity, higher volatility, and unique microstructure (funding rates, liquidation cascades). Outside of QuantAgent and InvestorBench, there is **limited crypto-specific evaluation**, so confidence in direct transfer of results should be treated as **medium** until we run our own crypto-focused tests.
 
 ## 4. Grok Series & "FinanceArena" Investigation
 *   **"FinanceArena" / FinSearchComp (Sep 2025):** The user likely refers to **FinSearchComp**, which positions itself as a realistic financial search arena.

@@ -24,8 +24,8 @@ StockBench (arXiv:2510.02209) provides error analysis for LLM trading agents:
 | --- | --- | --- | --- |
 | Qwen3-235B-Think | 5.7% | 14.5% | Fewer calc errors, more format issues |
 | Qwen3-235B-Ins | 6.4% | 0.4% | Better schema compliance |
-| DeepSeek-V3.1-Think | 4% | 5.2% | Balanced |
-| DeepSeek-V3-Ins | 2% | 0.4% | Best schema compliance |
+| DeepSeek V3.1 (Think) | 4% | 5.2% | Balanced |
+| DeepSeek V3 (Instruct) | 2% | 0.4% | Best schema compliance |
 
 ---
 
@@ -46,13 +46,30 @@ StockBench (arXiv:2510.02209) provides error analysis for LLM trading agents:
 
 ---
 
-## Expected Performance by Model (based on benchmarks)
+## Prompt Engineering Considerations
+- **System prompt discipline**: lock output to JSON for indicator math to reduce schema drift.
+- **Few-shot math**: provide one worked indicator example to minimize arithmetic errors.
+- **Reasoning mode selection**: use direct-answer mode for strict calculations, chain-of-thought for narrative analysis.
+- **Output schema**: enforce a strict schema for price levels and confidence to enable downstream validation.
+
+---
+
+## Internal Evaluation Framework (Crypto TA)
+- Build a **50–100 setup dataset** from historical crypto charts (BTC/ETH/SOL).
+- Label each setup with deterministic outcomes: trigger, stop, target, max favorable excursion.
+- Score models on: indicator correctness, divergence detection, order block validity, and risk-reward math.
+- Use A/B tests with identical prompts and compare pass rates by category.
+
+---
+
+## Projected Performance by Model (not yet validated)
+*These figures are projections derived from benchmark trends. They must be replaced with measured results after the 100-prompt stress test.*
 
 | Model | Expected Calc Error | Expected Hallucination | Notes |
 | --- | --- | --- | --- |
 | **o3** | Low (<5%) | Low | Top FinanceArena scores |
-| **Claude Opus 4** | Low (<5%) | Low | Strong assumption-based reasoning |
-| GPT-5.2 | Medium (5-10%) | Low | General strong performer |
+| **Claude Opus 4.5** | Low (<5%) | Low | Strong assumption-based reasoning |
+| GPT-5.2 Pro | Medium (5-10%) | Low | General strong performer |
 | Kimi-K2 | Low (<5%) | Medium | Best StockBench composite |
 | Qwen3-235B-Ins | Low (<5%) | Medium | Good for batch processing |
 | DeepSeek V3.2 | Medium (5-10%) | Medium | Good budget option |
@@ -79,10 +96,11 @@ To reduce false positives, all detected divergences and order blocks should be v
 
 ## Recommendations
 
-1. **For production TA workflows**: Use Claude Opus 4 or o3 for complex reasoning tasks (lowest expected error rates)
-2. **For batch processing**: Use Qwen3-235B-Ins or DeepSeek V3.2 (good cost/accuracy balance)
-3. **Always pair LLM analysis with deterministic validation** to catch hallucinations
-4. **Prefer Instruct models over Thinking models** for TA tasks requiring structured output
+1. **For live/online TA workflows**: prioritize DeepSeek-R1 for dynamic tasks; use o3 or GPT-5.2 Pro for complex reasoning checks.
+2. **For profitability-oriented backtests**: Kimi-K2 and Qwen3-235B-Ins align best with StockBench-style results.
+3. **Always pair LLM analysis with deterministic validation** to catch hallucinations.
+4. **Prefer Instruct models over Thinking models** for TA tasks requiring structured output.
+5. **Re-evaluate after the stress test** to replace projected error rates with measured ones.
 
 ---
 

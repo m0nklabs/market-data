@@ -40,7 +40,7 @@ graph TD
 
 | Role | Responsibility | Engine | Why? |
 | :--- | :--- | :--- | :--- |
-| **Screener** | Initial filtering of 100+ pairs. | **DeepSeek V3.2** | Lowest cost (/bin/bash.32/M), good enough to say "No". |
+| **Screener** | Initial filtering of 100+ pairs. | **DeepSeek V3.2** | Lowest cost ($0.32/M), good enough to say "No". |
 | **Tactical** | Price action, levels, entry/exit math. | **DeepSeek-R1** | Best numerical calculation & live task performance. |
 | **Fundamental** | Sentiment, news correlation, narrative check. | **Grok 4 (Web)** | Only model with expert-level real-time search. |
 | **Strategist** | Portfolio fit, macro context, "sanity check". | **o3-mini / o3** | High reasoning capability to detect traps. |
@@ -86,8 +86,8 @@ class MultiAgentEvaluator:
 ### Phase 3: The "DeepSeek V3.2" Screen
 Implement a cost-effective filter.
 *   **Input:** 4h candle data for 20 assets.
-*   **Prompt:** "Identify patterns matching [Criteria]. Return JSON list of Tickers. Do not reason deeply, just filter."
-*   **Cost:** ~/bin/bash.01 per run for the whole market.
+*   **Prompt:** "Identify patterns matching the provided screening criteria (for example, trend-following setups with strong volume confirmation). Return a JSON list of tickers. Do not reason deeply, just filter."
+*   **Cost:** ~$0.01 per run for the whole market.
 
 ---
 
@@ -95,13 +95,28 @@ Implement a cost-effective filter.
 
 Assuming 50 signals filtered -> 5 high-quality evaluations:
 
-1.  **Screening (V3.2)**: 100 calls x /bin/bash.0001 = /bin/bash.01
-2.  **Tactical Analysis (R1)**: 10 calls x /bin/bash.01 = /bin/bash.10
-3.  **Fundamental Search (Grok)**: 10 calls x /bin/bash.03 = /bin/bash.30
-4.  **Strategy Check (o3-mini)**: 5 calls x /bin/bash.01 = /bin/bash.05
+1.  **Screening (V3.2)**: 100 calls x $0.0001 = $0.01
+2.  **Tactical Analysis (R1)**: 10 calls x $0.01 = $0.10
+3.  **Fundamental Search (Grok)**: 10 calls x $0.03 = $0.30
+4.  **Strategy Check (o3-mini)**: 5 calls x $0.01 = $0.05
 
-**Total Daily AI Cost:** ~/bin/bash.46
+**Total Daily AI Cost:** ~$0.46
 **Potential Upside:** Massively reduced false positives compared to single-model systems.
+
+---
+
+## 4b. Latency Considerations
+- **API latency** (1–5s) is acceptable for 4h/1d candles but unsuitable for true HFT.
+- **HFT path** should rely on deterministic signals + local inference to keep latency under 200ms.
+- Use LLMs primarily for **batch TA and discretionary trade setups**, not for sub-second execution.
+
+## 4c. Fallback & Redundancy Matrix
+
+| Primary | Fallback | Emergency | Use Case |
+| --- | --- | --- | --- |
+| DeepSeek-R1 | o3-mini | Local Qwen3-32B | Live/online reasoning tasks |
+| DeepSeek V3.2 | Gemini 3 Flash | Local Gemma 3 27B | High-volume screening |
+| Grok 4 (Web) | Perplexity Pro | Local news scraper | News/fundamental analysis |
 
 ## 5. Next Actions
 1.  [ ] Setup `core/ai` module in `cryptotrader`.

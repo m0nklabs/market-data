@@ -9,12 +9,12 @@ This document compares API pricing against local inference electricity costs for
 
 | Model | Input $/1M | Output $/1M | Blended $/1M (3:1) | Intelligence Score | Notes |
 | --- | --- | --- | --- | --- | --- |
-| GPT-5.2 Pro (xhigh) | $15.00 | $60.00 | $4.81 | 51 | Top quality, expensive |
+| GPT-5.2 Pro (extra-high context tier) | $15.00 | $60.00 | $4.81 | 51 | Top quality, expensive |
 | Claude Opus 4.5 | $15.00 | $75.00 | $10.00 | 50 | Slow (1.7 t/s), very expensive |
 | Gemini 3 Flash | ~$0.50 | ~$1.50 | $1.13 | 46 | Fast, cheap, large context |
 | Kimi K2.5 | ~$0.90 | ~$2.00 | $1.20 | 47 | Good value |
 | **DeepSeek V3.2** | $0.28 (miss) / $0.028 (hit) | $0.42 | **$0.32** | 42 | **Best budget API** |
-| Qwen3 Max Thinking | ~$1.80 | ~$4.00 | $2.40 | 40 | Good local-comparable |
+| Qwen3 Max (Thinking) | ~$1.80 | ~$4.00 | $2.40 | 40 | Good local-comparable |
 
 **Key insight:** DeepSeek V3.2 is ~15× cheaper than GPT-5.2 Pro with only ~18% lower intelligence score.
 
@@ -22,7 +22,7 @@ This document compares API pricing against local inference electricity costs for
 
 ## Local Energy Cost Model (27GB VRAM rigs)
 Assumptions:
-- Electricity price: **$0.165/kWh** (US average 2024).
+- Electricity price: **$0.165/kWh** (US average 2024 benchmark; adjust to your current local rate).
 - Power draw from GPU/system TDP.
 - Hourly cost = (Watts / 1000) × $/kWh.
 
@@ -60,6 +60,16 @@ Assumptions:
 | Mac Studio (M2 Ultra) | ~6 min | ~$0.005 | 200 | Best efficiency |
 
 **Break-even analysis:** Local inference beats API cost if you run >10 workloads/day over a year (amortizing ~$2,000 GPU cost).
+
+---
+
+## Token Usage Profiling (pending)
+Actual token counts vary with formatting. Before finalizing cost models, run a token count on representative OHLCV payloads:
+- CSV row-per-candle
+- JSON array of objects
+- Compact key-value format
+
+Record input/output token counts for each formatting style and update the assumptions in this doc.
 
 ---
 

@@ -5,6 +5,15 @@ This document captures the most relevant leaderboards for financial reasoning, t
 
 ---
 
+## Model Name Glossary
+- **GPT-5**: Benchmark name used in StockBench/BizFinBench; **GPT-5.2 Pro** is the current API pricing tier.
+- **o3 / o3-mini**: OpenAI reasoning models; o3-mini is the cost-reduced variant.
+- **Claude Opus 4 / 4.5**: Anthropic releases; 4.5 refers to the newest Opus tier.
+- **DeepSeek V3.1 / V3.2**: V3.1 appears in older benchmark snapshots; V3.2 is the current API release.
+- **Qwen2.5-30B-A3B**: MoE model with ~3B active parameters; distinct from Qwen3 dense models.
+
+---
+
 ## FinanceArena Leaderboards (snapshot 2026-02-05)
 
 ### FinanceQA Leaderboard (accuracy on professional finance tasks)
@@ -13,7 +22,7 @@ This document captures the most relevant leaderboards for financial reasoning, t
 | --- | --- | --- | --- | --- |
 | **o3** | 🥇 54.1% | 🥇 55.3% | 🥇 21.7% | 🥇 76.6% |
 | Grok 4 | 🥈 49.3% | 🥈 52.6% | 🥉 10.9% | 🥈 75.0% |
-| o4 mini | 🥉 48.6% | 🥈 52.6% | 8.7% | 🥈 75.0% |
+| o3-mini | 🥉 48.6% | 🥈 52.6% | 8.7% | 🥈 75.0% |
 | Gemini 2.5 Pro | 45.3% | 🥇 55.3% | 6.5% | 67.2% |
 | Llama 4 Maverick | 44.6% | 39.5% | 8.7% | 🥉 73.4% |
 | **Claude Opus 4** | 44.6% | 44.7% | 🥈 13.0% | 67.2% |
@@ -23,7 +32,7 @@ This document captures the most relevant leaderboards for financial reasoning, t
 | DeepSeek-R1-0528 | 42.9% | 🥉 50.0% | 6.5% | 65.1% |
 | QwQ-32B | 42.6% | 44.7% | 🥉 10.9% | 64.1% |
 | GPT-4.1 Mini | 41.9% | 39.5% | 🥉 10.9% | 65.6% |
-| Qwen3 30B A3B | 37.2% | 42.1% | 2.2% | 59.4% |
+| Qwen2.5-30B-A3B | 37.2% | 42.1% | 2.2% | 59.4% |
 | Gemini 2.5 Flash | 32.4% | 31.6% | 6.5% | 51.6% |
 
 **Key insight:** Assumption-Based accuracy (the hardest category) is <22% even for the best model; Claude Opus 4 ranks #2 on this category (13%).
@@ -36,7 +45,7 @@ This document captures the most relevant leaderboards for financial reasoning, t
 | 2 | Llama 4 Maverick | 1,058 |
 | 3 | Gemini 2.5 Flash | 1,054 |
 | 4 | Phi 4 | 1,039 |
-| 5 | DeepSeek V3.1 | 1,038 |
+| 5 | DeepSeek V3.1 (FinanceArena snapshot) | 1,038 |
 | 6 | Claude Sonnet 4 | 1,018 |
 | 7 | Claude Opus 4.1 | 1,017 |
 | 8 | GPT-4o | 1,004 |
@@ -46,6 +55,7 @@ This document captures the most relevant leaderboards for financial reasoning, t
 | 16 | Gemini 2.5 Pro | 940 |
 
 **Key insight:** Claude Opus 4 leads the Elo ranking for finance reasoning preference, but GPT-5 trails significantly (rank 15).
+**Note:** Models like **o3** may rank high in one leaderboard (FinanceQA) and lower in another (FinanceCompare) because the datasets and scoring methods differ.
 
 ---
 
@@ -61,10 +71,10 @@ StockBench evaluates LLM trading agents on 4-month DJIA trading. Metrics: cumula
 | 2 | **Qwen3-235B-Ins** | ~2.5+ | −11.2% | High | 0.28 | Lower MDD than Think variant |
 | 3 | GLM-4.5 | ~2+ | −12% | Good | 0.10 | Stable performer |
 | 4 | Qwen3-235B-Think | 2.5 | −14.9% | Med | 0.32 | Higher MDD than Ins |
-| 5 | OpenAI-O3 | ~2+ | −13% | Med | 3.25 | High variance |
+| 5 | o3 | ~2+ | −13% | Med | 3.25 | High variance |
 | 6 | Qwen3-30B-Think | ~1.5+ | −13% | Med | 0.12 | Local-viable |
 | 7 | Claude-4-Sonnet | ~1.5+ | −13% | Med | 0.15 | Midpack |
-| 8 | DeepSeek-V3.1 | ~1+ | −14% | Low | 0.20 | |
+| 8 | DeepSeek V3.1 | ~1+ | −14% | Low | 0.20 | |
 | 9 | GPT-5 | ~1+ | −14% | Low | 0.21 | Below baseline in downturn |
 | — | Passive Baseline | 0.4 | −15.2% | 0.016 | — | Buy-and-hold |
 | — | GPT-OSS-120B | <0 | −15%+ | Low | 10.19 | High variance, underperforms |
@@ -73,7 +83,9 @@ StockBench evaluates LLM trading agents on 4-month DJIA trading. Metrics: cumula
 1. Most LLMs beat the passive baseline in **upturn** markets, but **fail in downturn** periods.
 2. **Kimi-K2** and **Qwen3-235B-Ins** show the best risk-adjusted returns.
 3. "Thinking" (reasoning) models do not guarantee better trading performance; Qwen3-235B-Ins outperforms the Think variant.
-4. DeepSeek-V3.1 and GPT-5 rank in the lower half despite strong general benchmarks.
+4. DeepSeek V3.1 and GPT-5 rank in the lower half despite strong general benchmarks.
+
+**Benchmark reconciliation note:** StockBench measures **profitability in live DJIA trading**, while BizFinBench/DeepFund focus on **online task accuracy and live financial reasoning**. These can yield different “best” models, so we treat them as complementary signals rather than a single ranking.
 
 ---
 
@@ -83,7 +95,7 @@ Top models by "Intelligence Score" (higher = better reasoning quality):
 
 | Model | Context | Score | Price ($/M) | Speed (t/s) | Notes |
 | --- | --- | --- | --- | --- | --- |
-| **GPT-5.2 (xhigh)** | 400k | 51 | $4.81 | 37 | Top intelligence |
+| **GPT-5.2 (extra-high context tier)** | 400k | 51 | $4.81 | 37 | Top intelligence |
 | **Claude Opus 4.5** | 200k | 50 | $10.00 | 1.7 | Very slow, very expensive |
 | GPT-5.2 Codex (xhigh) | 400k | 49 | $4.81 | 24 | Coding focus |
 | Gemini 3 Pro Preview | 1m | 48 | $4.50 | 32 | Large context |
@@ -92,7 +104,7 @@ Top models by "Intelligence Score" (higher = better reasoning quality):
 | **DeepSeek V3.2** | 128k | 42 | $0.32 | 1.3 | **Best budget option** |
 | Grok 4 | 256k | 41 | $6.00 | 14 | Expensive |
 | o3 | 200k | 41 | $3.50 | 15 | Reasoning model |
-| **Qwen3 Max Thinking** | 256k | 40 | $2.40 | 1.6 | Local-comparable quality |
+| **Qwen3 Max (Thinking)** | 256k | 40 | $2.40 | 1.6 | Local-comparable quality |
 | Kimi K2 Thinking | 256k | 41 | $1.07 | 0.6 | Cheap reasoning |
 | Claude 4.5 Sonnet | 1m | 43 | $6.00 | 1.2 | Mid-tier Anthropic |
 
