@@ -7,12 +7,14 @@ Identify the best local model configuration that fits within a 27GB VRAM envelop
 
 ## Candidate Models Comparison
 
-| Model | Params | Context | Intelligence Score | Best For |
+| Model | Params | Context | Intelligence Score (est.) | Best For |
 | --- | --- | --- | --- | --- |
-| **Gemma 3 27B** | 27B | 128K | ~25 | VRAM headroom, good speed |
-| **Qwen3-32B** | 32B | 32K–128K | ~30 | Better reasoning quality |
-| DeepSeek-R1-Distill-Qwen-32B | 32B | 32K | ~27 | Reasoning-focused |
-| Qwen2.5-30B-A3B (MoE) | 30B (3B active) | 262K | ~22 | Very long context |
+| **Gemma 3 27B** | 27B | 128K | ~25 [ESTIMATED] | VRAM headroom, good speed |
+| **Qwen3-32B** | 32B | 32K–128K | ~30 [ESTIMATED] | Better reasoning quality |
+| DeepSeek-R1-Distill-Qwen-32B | 32B | 32K | ~27 [ESTIMATED] | Reasoning-focused |
+| Qwen2.5-30B-A3B (MoE) | 30B (3B active) | 262K | ~22 [ESTIMATED] | Very long context |
+
+> **Note:** Intelligence scores above are rough estimates extrapolated from API model scores on Artificial Analysis. No local quantized model has been formally benchmarked on these leaderboards. Treat as directional only.
 
 ---
 
@@ -43,11 +45,11 @@ Approximate weight-only VRAM using `params × bits / 8` as a rough baseline. Act
 
 ## Performance Benchmarks
 
-| Model | Tokens/sec (RTX 4090) | Quality vs Frontier | Notes |
+| Model | Tokens/sec (RTX 4090) | Quality vs Frontier (est.) | Notes |
 | --- | --- | --- | --- |
-| Gemma 3 27B Q6_K | 18–25 t/s | ~50% of GPT-5.2 | Good for batch TA |
-| Qwen3-32B Q5_K_M | 12–18 t/s | ~60% of GPT-5.2 | Better reasoning |
-| DeepSeek-R1-32B Q5_K_M | 10–15 t/s | ~55% of GPT-5.2 | Slower, chain-of-thought |
+| Gemma 3 27B Q6_K | 18–25 t/s | ~50% of GPT-5.2 [EST] | Good for batch TA |
+| Qwen3-32B Q5_K_M | 12–18 t/s | ~60% of GPT-5.2 [EST] | Better reasoning |
+| DeepSeek-R1-32B Q5_K_M | 10–15 t/s | ~55% of GPT-5.2 [EST] | Slower, chain-of-thought |
 
 ---
 

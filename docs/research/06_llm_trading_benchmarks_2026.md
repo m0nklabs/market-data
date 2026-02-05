@@ -1,4 +1,4 @@
-# Research: LLM Trading Benchmarks & Models (2026)
+# 06 — LLM Trading Benchmarks & Models (2026)
 
 **Date:** February 5, 2026
 **Context:** Investigation into state-of-the-art LLM benchmarks for financial reasoning, trading, and crypto technical analysis.
@@ -38,7 +38,7 @@
 *   Even **DeepSeek V3 (likely V3.2)** and **Claude 3.7 Sonnet** incurred net trading losses in the live environment.
     *   Highlights the "reality gap" between backtest performance and live execution.
 
-### QuantAgent (Sep 2025)
+### QuantAgent (Feb 2024, arXiv:2402.15809)
 *   **Paper:** "QuantAgent: Price-Driven Multi-Agent LLMs for High-Frequency Trading"
 *   **Focus:** High-Frequency Trading (HFT) and crypto (Bitcoin futures).
 *   **Relevance:** Directly addresses **Crypto Technical Analysis**.
@@ -54,8 +54,8 @@ Based on *BizFinBench.v2* and *DeepFund* results (Early 2026):
 | **1** | **DeepSeek-R1** | **#1 in Online/Live Tasks**, **#1 in Information Extraction**, **#1 in Numerical Calculation**. Best for "real world" dynamic usage. | - |
 | **2** | **GPT-5** | **#1 in General Financial QA** (61.5% accuracy). Strongest static knowledge base. | Slightly behind in dynamic online tasks compared to R1. |
 | **3** | **o3** | **#1 in Reasoning** (83.58). Excellent for logic-heavy tasks. | - |
-| **4** | **Gemini 2.0 Flash** | **#2 in Reasoning** (81.15). Very fast and capable. | - |
-| **5** | **Claude 3.5 Sonnet** | Strong in numerical calc (63.18). | Lagged in some v1 metrics compared to newer models. |
+| **4** | **Gemini 2.0 Flash** (BizFinBench v1 era) | **#2 in Reasoning** (81.15). Fast and capable; newer Gemini 2.5/3.x may score higher. | - |
+| **5** | **Claude 3.5 Sonnet** (BizFinBench v1 era) | Strong in numerical calc (63.18). | Older model; superseded by Claude Sonnet 4 / 4.5 in newer benchmarks. |
 
 **Note:** StockBench profitability rankings can differ from BizFinBench online-task rankings; use both to separate profitability from live-task accuracy.
 
@@ -68,8 +68,8 @@ Based on *BizFinBench.v2* and *DeepFund* results (Early 2026):
 ## 3b. Crypto Benchmark Coverage Gap
 Most published benchmarks (StockBench, BizFinBench, FinanceArena) focus on equity markets. Crypto markets have 24/7 liquidity, higher volatility, and unique microstructure (funding rates, liquidation cascades). Outside of QuantAgent and InvestorBench, there is **limited crypto-specific evaluation**, so confidence in direct transfer of results should be treated as **medium** until we run our own crypto-focused tests.
 
-## 4. Grok Series & "FinanceArena" Investigation
-*   **"FinanceArena" / FinSearchComp (Sep 2025):** The user likely refers to **FinSearchComp**, which positions itself as a realistic financial search arena.
+## 4. Grok Series & FinSearchComp Investigation
+*   **FinSearchComp (Sep 2025):** A realistic financial search benchmark (sometimes loosely called "FinanceArena" in discussions).
     *   **Result:** **Grok 4 (web)** ranked **#1 in the Global subset**, approaching expert-level accuracy.
     *   **Strength:** Unmatched in **Time-Sensitive Data Fetching** and **Complex Historical Investigation**.
     *   **Contrast:** DouBao (web) led the Greater China subset.
@@ -81,7 +81,7 @@ Most published benchmarks (StockBench, BizFinBench, FinanceArena) focus on equit
 
 | Feature | **Grok 4** | **DeepSeek-R1** | **GPT-5** |
 | :--- | :--- | :--- | :--- |
-| **Financial Reasoning** | **Top Tier (Search-based)**. Excelled in *FinSearchComp* for retrieving and synthesizing live data. | **Top Tier (Logic-based)**. #1 in *BizFinBench* for numerical calculation and information extraction. | **Top Tier (Knowledge-based)**. #1 in *StockBench* & *BizFinBench* for static QA. |
+| **Financial Reasoning** | **Top Tier (Search-based)**. Excelled in *FinSearchComp* for retrieving and synthesizing live data. | **Top Tier (Logic-based)**. #1 in *BizFinBench* for numerical calculation and information extraction. | **Top Tier (Knowledge-based)**. #1 in *BizFinBench* for static QA (61.5%). Mid-pack (#9) in *StockBench* profitability. |
 | **Trading Utility** | **Fundamental Analysis**. Best for "What caused AAPL to drop?" or seeking macro trends. | **Execution/Tactics**. Best for processing live order book numbers and "online" decision making. | **Strategy Design**. Best for creating the initial trade thesis or coding the strategy. |
 | **Adoption Barriers** | **Latency/Format.** "Web" mode implies higher latency than direct API inference. Strongest in "Chat/Search" rather than "Raw Token Processing". | **Trust/Safety.** Excellent performance but "time travel" tests (DeepFund) show it can still lose money live. | **Cost.** generally highest cost per token for the "Pro" variants needed for complex reasoning. |
 
@@ -90,3 +90,15 @@ Most published benchmarks (StockBench, BizFinBench, FinanceArena) focus on equit
 *   **Research/News Agent:** **Grok 4** (if API available) is the recommended "Searcher" agent for fundamental data, replacing standard Google/Bing wrappers.
 *   **Pattern Recognition:** Use established frameworks like **QuantAgent** (separate agents for indicators vs patterns) rather than asking a single LLM to do it all.
 *   **Backtesting Reality Check:** Be extremely wary of backtests. *DeepFund* proves that models profitable in backtests (DeepSeek-V3, Claude-3.7) can lose money live.
+
+---
+
+## Sources Appendix (accessed 2026-02-05)
+
+| Source | Relevance |
+| --- | --- |
+| https://hf.co/papers/2601.06401 | BizFinBench.v2 paper (GPT-5 #1 static, DeepSeek-R1 #1 online) |
+| https://hf.co/papers/2505.11065 | DeepFund paper (live trading reality gap) |
+| https://hf.co/papers/2510.02209 | StockBench paper (LLM trading profitability) |
+| https://hf.co/papers/2509.13160 | FinSearchComp paper (Grok 4 #1 search) |
+| https://arxiv.org/abs/2402.15809 | QuantAgent paper (multi-agent crypto HFT) |

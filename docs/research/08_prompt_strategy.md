@@ -88,3 +88,13 @@ Reason: ...
     *   Strategist: `0.6` (Allow creative risk scenario modeling).
 *   **Schema Safety (Tactical):** Always run the Tactical agent's output through a strict JSON parser/schema validator and re-prompt using a two-stage pattern (internal reasoning → final JSON-only response) when invalid.
 *   **Context Window:** Make OHLCV length configurable by timeframe (e.g., ~100 candles for intraday, 500+ for swing, 2,000+ for position trading) or use a multi-resolution approach that summarizes older candles.
+
+---
+
+## Sources Appendix (accessed 2026-02-05)
+
+| Source | Relevance |
+| --- | --- |
+| Docs 01–07 in this research series | Benchmark data and architecture informing prompt design |
+| https://platform.openai.com/docs/guides/prompt-engineering | OpenAI prompt engineering best practices |
+| https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering | Anthropic prompt engineering guide |

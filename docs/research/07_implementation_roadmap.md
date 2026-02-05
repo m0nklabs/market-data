@@ -124,3 +124,13 @@ Assuming 50 signals filtered -> 5 high-quality evaluations:
 1.  [ ] Setup `core/ai` module in `cryptotrader`.
 2.  [ ] Implement generic `LLMProvider` with DeepSeek & OpenAI support.
 3.  [ ] Build the "Screener" agent using DeepSeek V3.2.
+
+---
+
+## Sources Appendix (accessed 2026-02-05)
+
+| Source | Relevance |
+| --- | --- |
+| Docs 01–06 in this research series | Benchmark data informing architecture decisions |
+| https://arxiv.org/abs/2402.15809 | QuantAgent multi-agent framework (architecture inspiration) |
+| https://github.com/microsoft/qlib | Microsoft Qlib quantitative investment platform |

@@ -7,7 +7,7 @@
 | **Live Execution / Online** | **DeepSeek-R1** | QuantAgent | #1 in BizFinBench Online Tasks |
 | **News / Fundamentals** | **Grok 4 (Web)** | Perplexity Pro | #1 Real-time data fetching |
 | **General Intelligence** | **GPT-5** | Claude Opus 4.5 | #1 Static QA (61.5% acc) |
-| **Finance Reasoning** | **o3** | Gemini 2.0 Flash | #1 Pure Reasoning (83.6 score) |
+| **Finance Reasoning** | **o3** | Gemini 2.5 Flash | #1 Pure Reasoning (83.6 score, BizFinBench v1) |
 | **Trading/TA** | **DeepSeek-R1 (online tasks)** | Kimi-K2 (StockBench) | DeepSeek-R1 for dynamic tasks; Kimi-K2 for profitability-focused backtests |
 | **Budget API** | **DeepSeek V3.2** | Gemini 3 Flash | $0.32/M (cache miss) or ~$0.03/M (cache hit) |
 | **Fast + cheap** | **Gemini 3 Flash** | Gemini 3 Pro | 46 score @ $1.13/M |
@@ -23,7 +23,7 @@
 | --- | --- | --- | --- | --- | --- |
 | **DeepSeek-R1** | 🥇 High | **#1 Live/Online** | **Best** | ≈$0.55 | **Best for Execution** |
 | **Grok 4 (Web)** | 49 | **#1 Search** | Mid | $6.00 | **Top Fundamental/News** |
-| **GPT-5** | 🥇 61.5% Acc | High | Mid | $4.81 | **Top General Intelligence** |
+| **GPT-5** | 🥇 61.5% Acc (BizFinBench) | High | Mid (#9 StockBench) | $57.75 blended | **Top General Intelligence** |
 | **o3-mini** | High | #1 Reasoning | High | $1.10 | **Best Reasoning Value** |
 | **Phi-4 (Finance)** | Mid | N/A | Mid | Local | **Best Laptop Local** |
 | **o3** | High | **#1 Reasoning** | Mid | $3.50 | **Best Risk/Reasoning** |
@@ -92,7 +92,7 @@ At >100 runs/day, local inference (Gemma 3 27B on RTX 4090) costs ~$0.006/run vs
 | --- | --- | --- |
 | **BizFinBench.v2** | [Paper (HuggingFace)](https://hf.co/papers/2601.06401) | #1 Leaderboard for Live/Online financial tasks. |
 | **DeepFund** | [Paper (HuggingFace)](https://hf.co/papers/2505.11065) | Demonstrates the "Backtest vs Reality" gap in live trading. |
-| **StockBench** | [Paper (HuggingFace)](https://hf.co/papers/2510.02209) | Trading agent profitability benchmarks (Stock/Crypto). |
+| **StockBench** | [Paper (HuggingFace)](https://hf.co/papers/2510.02209) | Trading agent profitability benchmarks (DJIA stocks only; no crypto coverage). |
 | **FinSearchComp** | [Paper (HuggingFace)](https://hf.co/papers/2509.13160) | Financial Search & Reasoning (Grok 4 winner). |
 | **QuantAgent** | [Paper (arXiv)](https://arxiv.org/abs/2402.15809) | Price-Driven Multi-Agent LLMs for HFT. |
 | **Microsoft Qlib** | [GitHub Repo](https://github.com/microsoft/qlib) | AI-oriented Quantitative Investment Platform ("bleeding edge" tooling). |

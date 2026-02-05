@@ -1,11 +1,5 @@
 # 01 — Market Leaderboards 2026
 
-## Model Glossary & Clarity
-Different benchmarks refer to models by varying names. For correctness:
-*   **DeepSeek-R1**: The reasoning/Chain-of-Thought model (best for live math).
-*   **Kimi-K2**: A different model excelling in "StockBench" (backtesting), not to be confused with live execution.
-*   **Grok 4**: XAI's latest model, utilized for its real-time web search capabilities.
-
 ## Scope
 This document captures the most relevant leaderboards for financial reasoning, technical analysis (TA), and trading agent benchmarks. It prioritizes finance-specific leaderboards (FinanceArena, StockBench) and cross-references general reasoning benchmarks used to compare frontier and local models.
 See **08_prompt_strategy.md** for prompt engineering guidance that complements these benchmark summaries.
@@ -13,11 +7,18 @@ See **08_prompt_strategy.md** for prompt engineering guidance that complements t
 ---
 
 ## Model Name Glossary
+Different benchmarks refer to models by varying names. This glossary is the canonical reference across all research docs.
+
+- **DeepSeek-R1** / **DeepSeek-R1-0528**: The reasoning/Chain-of-Thought model (best for live math). "-0528" suffix denotes benchmark snapshot version.
+- **DeepSeek V3.1 / V3.2**: V3.1 appears in older benchmark snapshots; V3.2 is the current API release. When a source says **DeepSeek V3** without a minor version, treat it as V3.2 unless explicitly noted.
+- **Kimi-K2**: A different model excelling in "StockBench" (backtesting), not to be confused with live execution.
 - **GPT-5**: Benchmark name used in StockBench/BizFinBench; **GPT-5.2 Pro** is the current API pricing tier.
 - **o3**: OpenAI reasoning model used in several benchmark leaderboards.
 - **o3-mini**: Cost-reduced o3 variant for lower-latency/price tiers.
 - **Claude Opus 4 / 4.5**: Anthropic releases; 4.5 refers to the newest Opus tier.
-- **DeepSeek V3.1 / V3.2**: V3.1 appears in older benchmark snapshots; V3.2 is the current API release. When a source says **DeepSeek V3** without a minor version, treat it as V3.2 unless explicitly noted.
+- **Claude Sonnet 4**: Anthropic mid-tier model. Distinct from Claude 3.5 Sonnet (older gen) and Claude 4.5 Sonnet.
+- **Gemini 2.0 Flash / 2.5 Flash / 2.5 Pro / 3 Flash / 3 Pro**: Google generations; BizFinBench v1 used 2.0 Flash, newer benchmarks use 2.5/3.x.
+- **Grok 3 / Grok 4**: XAI models; Grok 4 is the latest, utilized for its real-time web search capabilities.
 - **Qwen2.5-30B-A3B**: MoE model with ~3B active parameters; distinct from Qwen3 dense models.
 
 ---
@@ -56,8 +57,9 @@ Snapshot values below are copied from external leaderboards and should be re-val
 | 4 | Phi 4 | 1,039 |
 | 5 | DeepSeek V3.1 (FinanceArena snapshot) | 1,038 |
 | 6 | Claude Sonnet 4 | 1,018 |
-| 7 | Claude Opus 4.1 | 1,017 |
+| 7 | Claude Opus 4.1 (FinanceArena label) | 1,017 |
 | 8 | GPT-4o | 1,004 |
+| — | *Ranks 9–10, 12, 14 omitted (models not relevant to our use case)* | — |
 | 11 | Grok 4 | 982 |
 | 13 | o3 | 970 |
 | 15 | GPT-5 | 953 |
