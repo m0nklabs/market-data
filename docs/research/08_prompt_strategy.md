@@ -21,7 +21,7 @@ Task: Analyze the immediate price action structure.
 Constraints:
 1. Validation: If the latest close is < EMA_200, bias is BEARISH. Overrule only if a reversal pattern is > 90% clear.
 2. Math: Calculate Reward:Risk ratio exactly. Entry = current price. Stop = recent swing low. Target = next resistance.
-3. Output: Return valid JSON only. Ensure `reasoning_summary` is a JSON-escaped, single-line string (escape quotes and avoid newlines).
+3. Output: Return valid JSON only. Ensure `reasoning_summary` is a JSON-escaped, single-line string (escape quotes and avoid newlines), e.g. `"summary with \\\"quotes\\\" and no \\n chars"`.
 
 Strict Format:
 {

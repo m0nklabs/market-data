@@ -16,9 +16,9 @@ This document compares API pricing against local inference electricity costs for
 | **DeepSeek V3.2** | $0.28 (miss) / $0.028 (hit) | $0.42 | **$0.32 (miss)** | 42 | **Best budget API** |
 | Qwen3 Max (Thinking) | ~$1.80 | ~$4.00 | ~$2.35 | 40 | Good local-comparable |
 
-**Key insight:** DeepSeek V3.2 is roughly two orders of magnitude cheaper than GPT-5.2 Pro at blended cache-miss rates.
-**Pricing note:** GPT-5.2 Pro pricing reflects the 400k context tier; adjust if a lower tier is used.
-**Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output). For DeepSeek V3.2, the blended number above assumes cache-miss input pricing. Values are rounded to 2 decimals where applicable.
+**Key insight:** DeepSeek V3.2 is ~180× cheaper than GPT-5.2 Pro at blended cache-miss rates.
+**Pricing note:** Input/output rates come from vendor pricing pages and may differ from leaderboard estimates. GPT-5.2 Pro pricing reflects the 400k context tier; adjust if a lower tier is used.
+**Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output). For DeepSeek V3.2, the blended number above assumes cache-miss input pricing. Tildes (~) indicate approximate vendor rates; blended values are rounded to 2 decimals.
 
 ---
 

@@ -15,7 +15,7 @@ graph TD
     
     subgraph "Layer 1: Filtering (Low Cost)"
         SignalDetector[Algorithmic Signal Detector] -->|Raw Signal| QuantFilter
-        QuantFilter[DeepSeek V3.2 / Quant Screener (role agent, not QuantAgent framework)] -->|Probable Setup| Router
+        QuantFilter[DeepSeek V3.2 / Quant Screener] -->|Probable Setup| Router
     end
     
     subgraph "Layer 2: Evaluation (Specialized)"
@@ -33,6 +33,8 @@ graph TD
         RiskGuard -->|Approved| ExecutionAlgo
     end
 ```
+
+*Note: “Quant Screener” here refers to the role agent in this architecture, not the QuantAgent framework paper referenced in doc 06.*
 
 ---
 
