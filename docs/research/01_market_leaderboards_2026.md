@@ -1,5 +1,11 @@
 # 01 — Market Leaderboards 2026
 
+## Model Glossary & Clarity
+Different benchmarks refer to models by varying names. For correctness:
+*   **DeepSeek-R1**: The reasoning/Chain-of-Thought model (best for live math).
+*   **Kimi-K2**: A different model excelling in "StockBench" (backtesting), not to be confused with live execution.
+*   **Grok 4**: XAI's latest model, utilized for its real-time web search capabilities.
+
 ## Scope
 This document captures the most relevant leaderboards for financial reasoning, technical analysis (TA), and trading agent benchmarks. It prioritizes finance-specific leaderboards (FinanceArena, StockBench) and cross-references general reasoning benchmarks used to compare frontier and local models.
 
@@ -113,6 +119,14 @@ Top models by "Intelligence Score" (higher = better reasoning quality):
 1. **DeepSeek V3.2**: Score 42 @ $0.32/M → 131 score/$
 2. **Gemini 3 Flash**: Score 46 @ $1.13/M → 41 score/$
 3. **Kimi K2 Thinking**: Score 41 @ $1.07/M → 38 score/$
+
+---
+
+## Gap Analysis: The Crypto Reality
+**Critical Warning:** None of the cited benchmarks (FinanceArena, StockBench, DeepFund) specifically target **cryptocurrency** markets.
+*   **Volatility**: Crypto > Stocks (Models untrained on 20% candle wicks may fail).
+*   **Data Structure**: 24/7 markets vs Market Close logic.
+*   **Conclusion**: All "Live" performance metrics must be discounted by an estimated 15-20% for crypto assets until verified by `cryptotrader`'s own logs.
 
 ---
 

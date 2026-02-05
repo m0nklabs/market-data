@@ -65,6 +65,8 @@ StockBench (arXiv:2510.02209) provides error analysis for LLM trading agents:
 ## Projected Performance by Model (not yet validated)
 *These figures are projections derived from benchmark trends. See **Stress Test Design (100 prompts)** and **Internal Evaluation Framework (Crypto TA)** in this document for the validation plan and replace with measured results after execution.*
 
+> **Note:** These figures are [PROJECTED] based on BizFinBench performance. Local stress testing in `cryptotrader` is pending implementation.
+
 | Model | Expected Calc Error | Expected Hallucination | Notes |
 | --- | --- | --- | --- |
 | **o3** | Low (<5%) | Low | Top FinanceArena scores |
