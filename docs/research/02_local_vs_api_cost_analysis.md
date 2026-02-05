@@ -17,7 +17,7 @@ This document compares API pricing against local inference electricity costs for
 | Qwen3 Max (Thinking) | ~$1.80 | ~$4.00 | ~$2.35 | 40 | Good local-comparable |
 
 **Key insight:** DeepSeek V3.2 is ~180× cheaper than GPT-5.2 Pro at blended cache-miss rates.
-**Pricing note:** Input/output rates come from vendor pricing pages and may differ from leaderboard estimates. GPT-5.2 Pro pricing reflects the 400k context tier; adjust if a lower tier is used. Earlier drafts used aggregated “blended” costs from dashboards; this table now recomputes blended costs from raw vendor rates, so values differ materially.
+**Pricing note:** Input/output rates come from vendor pricing pages and may differ from leaderboard estimates. GPT-5.2 Pro pricing reflects the 400k context tier; adjust if a lower tier is used. Earlier drafts used aggregated “blended” costs from dashboards (e.g., the $4.81/1M estimate in doc 01); this table now recomputes blended costs from raw vendor rates, so values differ materially.
 **Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output). For DeepSeek V3.2, the blended number above assumes cache-miss input pricing. Tildes (~) indicate approximate vendor rates; blended values are rounded to 2 decimals.
 
 ---
@@ -66,7 +66,7 @@ Costs per run below are computed from the **input/output** rates (not the blende
 
 **Break-even analysis:**
 - Formula: break-even runs = GPU capex ÷ (API cost/run − local cost/run).
-- Versus **DeepSeek V3.2** on RTX 4090: savings/run ≈ $0.013 − $0.006 = **$0.007** → **~285,000 runs** total, i.e. **~780 runs/day over 1 year**.
+- Versus **DeepSeek V3.2** on RTX 4090: savings/run ≈ $0.013 − $0.006 = **$0.007** → **~285,000 runs** total, i.e. **~783 runs/day over 1 year**.
 - Versus **GPT-5.2 Pro** (~$1.68/run vs ~$0.006 local): savings/run ≈ **$1.67** → **~1,200 runs** total, i.e. **~3–4 runs/day over 1 year**.
 - Adjust for cache-hit rates, amortization horizon (2–3 years), and shared GPU workloads. This corrects the earlier “>10 runs/day” estimate which understated the break-even threshold against low-cost APIs.
 
