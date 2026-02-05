@@ -63,13 +63,13 @@ StockBench (arXiv:2510.02209) provides error analysis for LLM trading agents:
 ---
 
 ## Projected Performance by Model (not yet validated)
-*These figures are projections derived from benchmark trends. They must be replaced with measured results after the 100-prompt stress test.*
+*These figures are projections derived from benchmark trends. See **Stress Test Design (100 prompts)** and **Internal Evaluation Framework (Crypto TA)** in this document for the validation plan and replace with measured results after execution.*
 
 | Model | Expected Calc Error | Expected Hallucination | Notes |
 | --- | --- | --- | --- |
 | **o3** | Low (<5%) | Low | Top FinanceArena scores |
 | **Claude Opus 4.5** | Low (<5%) | Low | Strong assumption-based reasoning |
-| GPT-5.2 Pro | Medium (5-10%) | Low | General strong performer |
+| GPT-5 | Medium (5-10%) | Low | General strong performer |
 | Kimi-K2 | Low (<5%) | Medium | Best StockBench composite |
 | Qwen3-235B-Ins | Low (<5%) | Medium | Good for batch processing |
 | DeepSeek V3.2 | Medium (5-10%) | Medium | Good budget option |
@@ -96,7 +96,7 @@ To reduce false positives, all detected divergences and order blocks should be v
 
 ## Recommendations
 
-1. **For live/online TA workflows**: prioritize DeepSeek-R1 for dynamic tasks; use o3 or GPT-5.2 Pro for complex reasoning checks.
+1. **For live/online TA workflows**: prioritize DeepSeek-R1 for dynamic tasks; use o3 or GPT-5 (API via GPT-5.2 Pro tier) for complex reasoning checks.
 2. **For profitability-oriented backtests**: Kimi-K2 and Qwen3-235B-Ins align best with StockBench-style results.
 3. **Always pair LLM analysis with deterministic validation** to catch hallucinations.
 4. **Prefer Instruct models over Thinking models** for TA tasks requiring structured output.

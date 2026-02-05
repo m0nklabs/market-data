@@ -9,7 +9,7 @@ This document compares API pricing against local inference electricity costs for
 
 | Model | Input $/1M | Output $/1M | Blended $/1M (3:1) | Intelligence Score | Notes |
 | --- | --- | --- | --- | --- | --- |
-| GPT-5.2 Pro (extra-high context tier) | $15.00 | $60.00 | $4.81 | 51 | Top quality, expensive |
+| GPT-5.2 Pro (400k context tier) | $15.00 | $60.00 | $4.81 | 51 | Top quality, expensive |
 | Claude Opus 4.5 | $15.00 | $75.00 | $10.00 | 50 | Slow (1.7 t/s), very expensive |
 | Gemini 3 Flash | ~$0.50 | ~$1.50 | $1.13 | 46 | Fast, cheap, large context |
 | Kimi K2.5 | ~$0.90 | ~$2.00 | $1.20 | 47 | Good value |
@@ -17,6 +17,8 @@ This document compares API pricing against local inference electricity costs for
 | Qwen3 Max (Thinking) | ~$1.80 | ~$4.00 | $2.40 | 40 | Good local-comparable |
 
 **Key insight:** DeepSeek V3.2 is ~15× cheaper than GPT-5.2 Pro with only ~18% lower intelligence score.
+**Pricing note:** GPT-5.2 Pro pricing reflects the 400k context tier; adjust if a lower tier is used.
+**Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output).
 
 ---
 

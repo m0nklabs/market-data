@@ -8,7 +8,7 @@
 | **News / Fundamentals** | **Grok 4 (Web)** | Perplexity Pro | #1 Real-time data fetching |
 | **General Intelligence** | **GPT-5** | Claude Opus 4.5 | #1 Static QA (61.5% acc) |
 | **Finance Reasoning** | **o3** | Gemini 2.0 Flash | #1 Pure Reasoning (83.6 score) |
-| **Trading/TA** | **DeepSeek-R1 (online tasks)** | Kimi-K2 (StockBench) | Online accuracy vs profitability benchmarks |
+| **Trading/TA** | **DeepSeek-R1 (online tasks)** | Kimi-K2 (StockBench) | DeepSeek-R1 for dynamic tasks; Kimi-K2 for profitability-focused backtests |
 | **Budget API** | **DeepSeek V3.2** | Gemini 3 Flash | $0.32/M (DeepSeek) is unbeaten |
 | **Fast + cheap** | **Gemini 3 Flash** | Gemini 3 Pro | 46 score @ $1.13/M |
 | **Local (27GB)** | **Gemma 3 27B** | Qwen3-32B | Best verified local fit |

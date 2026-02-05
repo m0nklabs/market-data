@@ -7,7 +7,8 @@ This document captures the most relevant leaderboards for financial reasoning, t
 
 ## Model Name Glossary
 - **GPT-5**: Benchmark name used in StockBench/BizFinBench; **GPT-5.2 Pro** is the current API pricing tier.
-- **o3 / o3-mini**: OpenAI reasoning models; o3-mini is the cost-reduced variant.
+- **o3**: OpenAI reasoning model used in several benchmark leaderboards.
+- **o3-mini**: Cost-reduced o3 variant for lower-latency/price tiers.
 - **Claude Opus 4 / 4.5**: Anthropic releases; 4.5 refers to the newest Opus tier.
 - **DeepSeek V3.1 / V3.2**: V3.1 appears in older benchmark snapshots; V3.2 is the current API release.
 - **Qwen2.5-30B-A3B**: MoE model with ~3B active parameters; distinct from Qwen3 dense models.

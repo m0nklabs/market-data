@@ -86,7 +86,7 @@ class MultiAgentEvaluator:
 ### Phase 3: The "DeepSeek V3.2" Screen
 Implement a cost-effective filter.
 *   **Input:** 4h candle data for 20 assets.
-*   **Prompt:** "Identify patterns matching the provided screening criteria (for example, trend-following setups with strong volume confirmation). Return a JSON list of tickers. Do not reason deeply, just filter."
+*   **Prompt:** "Identify patterns matching the provided screening criteria (configured in the screener). Return a JSON list of tickers. Do not reason deeply, just filter."
 *   **Cost:** ~$0.01 per run for the whole market.
 
 ---
@@ -114,7 +114,7 @@ Assuming 50 signals filtered -> 5 high-quality evaluations:
 
 | Primary | Fallback | Emergency | Use Case |
 | --- | --- | --- | --- |
-| DeepSeek-R1 | o3-mini | Local Qwen3-32B | Live/online reasoning tasks |
+| DeepSeek-R1 | o3-mini | Local Qwen3-32B | Dynamic reasoning tasks (online API) |
 | DeepSeek V3.2 | Gemini 3 Flash | Local Gemma 3 27B | High-volume screening |
 | Grok 4 (Web) | Perplexity Pro | Local news scraper | News/fundamental analysis |
 
