@@ -2,6 +2,11 @@
 
 ## TL;DR — Which Model Is Best?
 
+> ⚠️ **Data freshness note:** 
+> - **StockBench** (Oct 2025) does not include GPT-5.2, Claude Opus 4.5, or Gemini 3.0
+> - **FinanceArena** and **Artificial Analysis** are continuously updated and include newer models
+> - For trading performance, we extrapolate from older model versions where newer ones aren't tested
+
 | Use Case | Best Model | Runner-Up | Notes |
 | --- | --- | --- | --- |
 | **Trading/TA (production)** | **Kimi-K2** | Qwen3-235B-Ins | Best StockBench composite score |

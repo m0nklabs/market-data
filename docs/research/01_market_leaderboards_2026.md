@@ -53,6 +53,13 @@ This document captures the most relevant leaderboards for financial reasoning, t
 
 StockBench evaluates LLM trading agents on 4-month DJIA trading (Mar–Jun 2025). Metrics: cumulative return, max drawdown (MDD), Sortino ratio. Baseline: equal-weight buy-and-hold (+0.4%, MDD −15.2%).
 
+> ⚠️ **Note:** StockBench (arXiv:2510.02209, Oct 2025) does not include models released after mid-2025:
+> - ❌ GPT-5.2 (Jan 2026) — not tested
+> - ❌ Claude Opus 4.5 (Dec 2025) — not tested  
+> - ❌ Gemini 3.0 (Jan 2026) — not tested
+> 
+> These newer models appear in FinanceArena and Artificial Analysis leaderboards above.
+
 ### StockBench Results Table (composite rank by z-score)
 
 | Rank | Model | Return (%) | MDD (%) | Sortino | Variance | Notes |
