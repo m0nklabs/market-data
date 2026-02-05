@@ -5,20 +5,20 @@ This document compares API pricing against local inference electricity costs for
 
 ---
 
-## API Pricing Snapshot (Feb 2026)
+## API Pricing Snapshot (Feb 2026, PENDING VALIDATION)
 
 | Model | Input $/1M | Output $/1M | Blended $/1M (3:1) | Intelligence Score | Notes |
 | --- | --- | --- | --- | --- | --- |
-| GPT-5.2 Pro (400k context tier) | $15.00 | $60.00 | $4.81 | 51 | Top quality, expensive |
-| Claude Opus 4.5 | $15.00 | $75.00 | $10.00 | 50 | Slow (1.7 t/s), very expensive |
-| Gemini 3 Flash | ~$0.50 | ~$1.50 | $1.13 | 46 | Fast, cheap, large context |
-| Kimi K2.5 | ~$0.90 | ~$2.00 | $1.20 | 47 | Good value |
-| **DeepSeek V3.2** | $0.28 (miss) / $0.028 (hit) | $0.42 | **$0.32** | 42 | **Best budget API** |
-| Qwen3 Max (Thinking) | ~$1.80 | ~$4.00 | $2.40 | 40 | Good local-comparable |
+| GPT-5.2 Pro (400k context tier) | $21.00 | $168.00 | $57.75 | 51 | Top quality, expensive |
+| Claude Opus 4.5 | $15.00 | $75.00 | $30.00 | 50 | Slow (1.7 t/s), very expensive |
+| Gemini 3 Flash | ~$0.50 | ~$1.50 | ~$0.75 | 46 | Fast, cheap, large context |
+| Kimi K2.5 | ~$0.90 | ~$2.00 | ~$1.18 | 47 | Good value |
+| **DeepSeek V3.2** | $0.28 (miss) / $0.028 (hit) | $0.42 | **$0.32 (miss)** | 42 | **Best budget API** |
+| Qwen3 Max (Thinking) | ~$1.80 | ~$4.00 | ~$2.35 | 40 | Good local-comparable |
 
-**Key insight:** DeepSeek V3.2 is ~15× cheaper than GPT-5.2 Pro with only ~18% lower intelligence score.
+**Key insight:** DeepSeek V3.2 is roughly two orders of magnitude cheaper than GPT-5.2 Pro at blended cache-miss rates.
 **Pricing note:** GPT-5.2 Pro pricing reflects the 400k context tier; adjust if a lower tier is used.
-**Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output).
+**Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output). For DeepSeek V3.2, the blended number above assumes cache-miss input pricing.
 
 ---
 
@@ -39,7 +39,8 @@ Assumptions:
 ## Hourly TA Workload Cost (1,000+ OHLCV candles)
 
 **Assumptions:**
-- 1,000 candles × 40 tokens per candle ≈ 40,000 input tokens.
+- Approximate working figure: **1,000 candles × 40 tokens per candle ≈ 40,000 input tokens**.
+  - Actual tokens per candle depend on serialization (CSV vs JSON vs compact) and included fields (OHLCV only vs extra indicators); real counts can vary by ~2–5×, so re-measure with your tokenizer before using these numbers for production cost planning.
 - 5,000 output tokens for analysis summary.
 - Total: 45,000 tokens per run.
 
@@ -48,9 +49,9 @@ Assumptions:
 | Model | Cost per run | Runs per $1 | Notes |
 | --- | --- | --- | --- |
 | GPT-5.2 Pro | ~$1.68 | 0.6 | Expensive for batch TA |
-| Claude Opus 4.5 | ~$2.00 | 0.5 | Very expensive |
-| Gemini 3 Flash | ~$0.05 | 20 | Good batch option |
-| **DeepSeek V3.2** | **~$0.014** | **71** | Best for high-volume TA |
+| Claude Opus 4.5 | ~$0.98 | 1.0 | Expensive |
+| Gemini 3 Flash | ~$0.03 | 33 | Good batch option |
+| **DeepSeek V3.2** | **~$0.013** | **77** | Best for high-volume TA |
 | Kimi K2.5 | ~$0.05 | 20 | Similar to Gemini |
 
 ### Local Inference Cost per Workload
@@ -61,7 +62,11 @@ Assumptions:
 | RTX 4090 (Q5_K_M 32B) | ~5 min | ~$0.006 | 167 | Faster |
 | Mac Studio (M2 Ultra) | ~6 min | ~$0.005 | 200 | Best efficiency |
 
-**Break-even analysis:** Local inference beats API cost if you run >10 workloads/day over a year (amortizing ~$2,000 GPU cost).
+**Break-even analysis:**
+- Formula: break-even runs = GPU capex ÷ (API cost/run − local cost/run).
+- Versus **DeepSeek V3.2** on RTX 4090: savings/run ≈ $0.013 − $0.006 = **$0.007** → **~285,000 runs** total, i.e. **~780 runs/day over 1 year**.
+- Versus **GPT-5.2 Pro** (~$1.68/run vs ~$0.006 local): savings/run ≈ **$1.67** → **~1,200 runs** total, i.e. **~3–4 runs/day over 1 year**.
+- Adjust for cache-hit rates, amortization horizon (2–3 years), and shared GPU workloads.
 
 ---
 

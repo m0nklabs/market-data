@@ -8,6 +8,7 @@ Different benchmarks refer to models by varying names. For correctness:
 
 ## Scope
 This document captures the most relevant leaderboards for financial reasoning, technical analysis (TA), and trading agent benchmarks. It prioritizes finance-specific leaderboards (FinanceArena, StockBench) and cross-references general reasoning benchmarks used to compare frontier and local models.
+See **08_prompt_strategy.md** for prompt engineering guidance that complements these benchmark summaries.
 
 ---
 
@@ -16,14 +17,15 @@ This document captures the most relevant leaderboards for financial reasoning, t
 - **o3**: OpenAI reasoning model used in several benchmark leaderboards.
 - **o3-mini**: Cost-reduced o3 variant for lower-latency/price tiers.
 - **Claude Opus 4 / 4.5**: Anthropic releases; 4.5 refers to the newest Opus tier.
-- **DeepSeek V3.1 / V3.2**: V3.1 appears in older benchmark snapshots; V3.2 is the current API release.
+- **DeepSeek V3.1 / V3.2**: V3.1 appears in older benchmark snapshots; V3.2 is the current API release. When a source says **DeepSeek V3** without a minor version, treat it as V3.2 unless explicitly noted.
 - **Qwen2.5-30B-A3B**: MoE model with ~3B active parameters; distinct from Qwen3 dense models.
 
 ---
 
-## FinanceArena Leaderboards (snapshot 2026-02-05)
+## FinanceArena Leaderboards (snapshot 2026-02-05, PENDING VALIDATION)
+Snapshot values below are copied from external leaderboards and should be re-validated before final recommendations.
 
-### FinanceQA Leaderboard (accuracy on professional finance tasks)
+### FinanceQA Leaderboard (accuracy on professional finance tasks, PENDING VALIDATION)
 
 | Model | Overall | Basic Tactical | Assumption-Based | Conceptual |
 | --- | --- | --- | --- | --- |
@@ -44,7 +46,7 @@ This document captures the most relevant leaderboards for financial reasoning, t
 
 **Key insight:** Assumption-Based accuracy (the hardest category) is <22% even for the best model; Claude Opus 4 ranks #2 on this category (13%).
 
-### FinanceCompare Elo Leaderboard (pairwise preference on finance reasoning)
+### FinanceCompare Elo Leaderboard (pairwise preference on finance reasoning, PENDING VALIDATION)
 
 | Rank | Model | Elo |
 | --- | --- | --- |
@@ -66,11 +68,11 @@ This document captures the most relevant leaderboards for financial reasoning, t
 
 ---
 
-## StockBench (Real-World Trading Profitability)
+## StockBench (Real-World Trading Profitability, PENDING VALIDATION)
 
 StockBench evaluates LLM trading agents on 4-month DJIA trading. Metrics: cumulative return, max drawdown (MDD), Sortino ratio. Baseline: equal-weight buy-and-hold (+0.4%, MDD −15.2%).
 
-### StockBench Results Table (composite rank by z-score)
+### StockBench Results Table (composite rank by z-score, PENDING VALIDATION)
 
 | Rank | Model | Return (%) | MDD (%) | Sortino | Variance | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -96,7 +98,7 @@ StockBench evaluates LLM trading agents on 4-month DJIA trading. Metrics: cumula
 
 ---
 
-## Artificial Analysis Intelligence Leaderboard (quality/cost/latency)
+## Artificial Analysis Intelligence Leaderboard (quality/cost/latency, PENDING VALIDATION)
 
 Top models by "Intelligence Score" (higher = better reasoning quality):
 

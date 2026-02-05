@@ -35,7 +35,7 @@
 *   **Paper:** "Time Travel is Cheating: Going Live with DeepFund for Real-Time Fund Investment Benchmarking"
 *   **Focus:** **Live** fund benchmark to prevent "time travel" (data leakage) in backtests.
 *   **Findings:**
-    *   Even **DeepSeek V3** and **Claude 3.7 Sonnet** incurred net trading losses in the live environment.
+*   Even **DeepSeek V3 (likely V3.2)** and **Claude 3.7 Sonnet** incurred net trading losses in the live environment.
     *   Highlights the "reality gap" between backtest performance and live execution.
 
 ### QuantAgent (Sep 2025)

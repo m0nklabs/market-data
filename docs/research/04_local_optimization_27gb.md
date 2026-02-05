@@ -18,7 +18,7 @@ Identify the best local model configuration that fits within a 27GB VRAM envelop
 
 ## Quantization & VRAM Footprint
 
-Approximate weight-only VRAM using `params × bits / 8`:
+Approximate weight-only VRAM using `params × bits / 8` as a rough baseline. Actual VRAM usage varies by quantization scheme, metadata overhead, and activation/KV cache requirements (for example, Q5_K_M uses mixed 5–6 bit weights, not a flat 5-bit footprint).
 
 | Model | Q5_K_M | Q6_K | Q8 | Notes |
 | --- | --- | --- | --- | --- |

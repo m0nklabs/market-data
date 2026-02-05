@@ -21,7 +21,7 @@ Task: Analyze the immediate price action structure.
 Constraints:
 1. Validation: If the latest close is < EMA_200, bias is BEARISH. Overrule only if a reversal pattern is > 90% clear.
 2. Math: Calculate Reward:Risk ratio exactly. Entry = current price. Stop = recent swing low. Target = next resistance.
-3. Output: Return valid JSON only.
+3. Output: Return valid JSON only. Ensure `reasoning_summary` is a JSON-escaped, single-line string (escape quotes and avoid newlines).
 
 Strict Format:
 {
@@ -33,7 +33,7 @@ Strict Format:
     "take_profit": 0.0,
     "rr_ratio": 0.0
   },
-  "reasoning_summary": "..."
+  "reasoning_summary": "Short, JSON-escaped summary (no newlines)."
 }
 ```
 
@@ -83,7 +83,8 @@ Reason: ...
 
 ## 5. Implementation Notes
 *   **Temperature:**
-    *   Tactical: `0.0` (Maximize determinism).
+    *   Tactical: `0.0` (Low randomness; JSON schema reliability is enforced via validator + two-stage prompting, not temperature alone).
     *   Fundamental: `0.3` (Allow variations in search terms).
     *   Strategist: `0.6` (Allow creative risk scenario modeling).
-*   **Context Window:** Always truncate OHLCV data to the last 100 candles to save input tokens/cost.
+*   **Schema Safety (Tactical):** Always run the Tactical agent's output through a strict JSON parser/schema validator and re-prompt using a two-stage pattern (internal reasoning → final JSON-only response) when invalid.
+*   **Context Window:** Make OHLCV length configurable by timeframe (e.g., ~100 candles for intraday, 500+ for swing, 2,000+ for position trading) or use a multi-resolution approach that summarizes older candles.

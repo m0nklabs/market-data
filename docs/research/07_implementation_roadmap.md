@@ -15,7 +15,7 @@ graph TD
     
     subgraph "Layer 1: Filtering (Low Cost)"
         SignalDetector[Algorithmic Signal Detector] -->|Raw Signal| QuantFilter
-        QuantFilter[DeepSeek V3.2 / QuantAgent] -->|Probable Setup| Router
+        QuantFilter[DeepSeek V3.2 / Quant Screener (role agent, not QuantAgent framework)] -->|Probable Setup| Router
     end
     
     subgraph "Layer 2: Evaluation (Specialized)"
@@ -87,7 +87,7 @@ class MultiAgentEvaluator:
 Implement a cost-effective filter.
 *   **Input:** 4h candle data for 20 assets.
 *   **Prompt:** "Identify patterns matching the provided screening criteria (configured in the screener). Return a JSON list of tickers. Do not reason deeply, just filter."
-*   **Cost:** ~$0.01 per run for the whole market.
+*   **Cost:** ~$0.01 per run for the whole market (assumes ~300 tokens/call at $0.32/M).
 
 ---
 
@@ -95,7 +95,7 @@ Implement a cost-effective filter.
 
 Assuming 50 signals filtered -> 5 high-quality evaluations:
 
-1.  **Screening (V3.2)**: 100 calls x $0.0001 = $0.01
+1.  **Screening (V3.2)**: 100 calls x $0.0001 = $0.01 (assumes ~300 tokens/call at $0.32/M)
 2.  **Tactical Analysis (R1)**: 10 calls x $0.01 = $0.10
 3.  **Fundamental Search (Grok)**: 10 calls x $0.03 = $0.30
 4.  **Strategy Check (o3-mini)**: 5 calls x $0.01 = $0.05
@@ -114,7 +114,7 @@ Assuming 50 signals filtered -> 5 high-quality evaluations:
 
 | Primary | Fallback | Emergency | Use Case |
 | --- | --- | --- | --- |
-| DeepSeek-R1 | o3-mini | Local Qwen3-32B | Dynamic reasoning tasks (online API) |
+| DeepSeek-R1 | o3-mini | Local Qwen3-32B Q5_K_M (≤32K ctx) | Dynamic reasoning tasks (online API) |
 | DeepSeek V3.2 | Gemini 3 Flash | Local Gemma 3 27B | High-volume screening |
 | Grok 4 (Web) | Perplexity Pro | Local news scraper | News/fundamental analysis |
 

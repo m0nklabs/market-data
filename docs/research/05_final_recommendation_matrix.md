@@ -9,9 +9,11 @@
 | **General Intelligence** | **GPT-5** | Claude Opus 4.5 | #1 Static QA (61.5% acc) |
 | **Finance Reasoning** | **o3** | Gemini 2.0 Flash | #1 Pure Reasoning (83.6 score) |
 | **Trading/TA** | **DeepSeek-R1 (online tasks)** | Kimi-K2 (StockBench) | DeepSeek-R1 for dynamic tasks; Kimi-K2 for profitability-focused backtests |
-| **Budget API** | **DeepSeek V3.2** | Gemini 3 Flash | $0.32/M (DeepSeek) is unbeaten |
+| **Budget API** | **DeepSeek V3.2** | Gemini 3 Flash | $0.32/M (cache miss) or ~$0.03/M (cache hit) |
 | **Fast + cheap** | **Gemini 3 Flash** | Gemini 3 Pro | 46 score @ $1.13/M |
 | **Local (27GB)** | **Gemma 3 27B** | Qwen3-32B | Best verified local fit |
+
+**Status:** Values above are sourced from external benchmarks and should be treated as **PENDING VALIDATION** until we refresh the leaderboards and run the internal stress test.
 
 ---
 
@@ -27,7 +29,7 @@
 | **o3** | High | **#1 Reasoning** | Mid | $3.50 | **Best Risk/Reasoning** |
 | **Claude Opus 4.5** | High | #2 Elo | — | $10.00 | Strong traditional reasoning |
 | **Kimi-K2** | 47 | Mid | #1 StockBench | $1.20 | Good trading baselines |
-| **DeepSeek V3.2** | 42 | Mid | — | **$0.32** | **Best Budget** |
+| **DeepSeek V3.2** | 42 | Mid | — | **$0.32 miss / $0.03 hit** | **Best Budget** |
 | Gemini 3 Flash | 46 | Low | — | $1.13 | Fast volume processor |
 | **Local Gemma 3** | ~25 | — | — | ≈$0.01 | **Best Privacy** |
 
@@ -47,10 +49,10 @@ StockBench emphasizes **profitability in live DJIA trading**, while BizFinBench/
 It leads in "Information Extraction" (crucial for reading news/docs) and "Numerical Calculation" (crucial for TA).
 
 ### 3. DeepSeek V3.2 Is the Value Champion
-For bulk processing where reasoning depth is less critical, V3.2 allows for massive scale at $0.32/M.
+For bulk processing where reasoning depth is less critical, V3.2 allows for massive scale at ~$0.32/M (cache miss) and can drop near ~$0.03/M with cache hits.
 
 ### 4. Local Models Are Viable for High Volume
-At >100 runs/day, local inference (Gemma 3 27B on RTX 4090) costs ~$0.006/run vs. $0.014/run for DeepSeek V3.2.
+At >100 runs/day, local inference (Gemma 3 27B on RTX 4090) costs ~$0.006/run vs. ~$0.013/run for DeepSeek V3.2 (cache miss).
 
 ---
 
