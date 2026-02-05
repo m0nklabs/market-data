@@ -5,6 +5,7 @@
 | Use Case | Best Model | Runner-Up | Notes |
 | --- | --- | --- | --- |
 | **Live Execution / Online** | **DeepSeek-R1** | QuantAgent | #1 in BizFinBench Online Tasks |
+| **News / Fundamentals** | **Grok 4 (Web)** | Perplexity Pro | #1 Real-time data fetching |
 | **General Intelligence** | **GPT-5** | Claude Opus 4.5 | #1 Static QA (61.5% acc) |
 | **Finance Reasoning** | **o3** | Gemini 2.0 Flash | #1 Pure Reasoning (83.6 score) |
 | **Trading/TA** | **DeepSeek-R1** | Kimi-K2 | Strongest numerical calc & info extraction |
@@ -19,6 +20,7 @@
 | Model | Intelligence | Finance Leaderboard | Trading | Cost ($/M) | Verdict |
 | --- | --- | --- | --- | --- | --- |
 | **DeepSeek-R1** | 🥇 High | **#1 Live/Online** | **Best** | ~$0.55 | **Best for Execution** |
+| **Grok 4 (Web)** | 49 | **#1 Search** | Mid | $6.00 | **Top Fundamental/News** |
 | **GPT-5** | 🥇 61.5% Acc | High | Mid | $4.81 | **Top General Intelligence** |
 | **o3** | High | **#1 Reasoning** | Mid | $3.50 | **Best Risk/Reasoning** |
 | **Claude Opus 4.5** | High | #2 Elo | — | $10.00 | Strong traditional reasoning |

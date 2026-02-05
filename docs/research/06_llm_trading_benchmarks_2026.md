@@ -5,6 +5,13 @@
 
 ## 1. Key Papers & Benchmarks
 
+### FinSearchComp (Sep 2025)
+*   **Paper:** "FinSearchComp: Benchmarking Financial Search & Reasoning"
+*   **Focus:** Time-sensitive data fetching, complex historical investigation, and fundamental analysis.
+*   **Winner:** **Grok 4 (Web)** ranked **#1** on the Global subset.
+*   **Strength:** Approaching expert-level accuracy in finding and correlating "fresh" financial news and data points.
+*   **Weakness:** Higher latency due to search integration; less suitable for HFT/scalping.
+
 ### StockBench (Oct 2025)
 *   **Paper:** "StockBench: Can LLM Agents Trade Stocks Profitably In Real-world Markets?" (Chen et al.)
 *   **Focus:** Realistic, multi-month stock trading environments (not just static QA).
@@ -56,13 +63,25 @@ Based on *BizFinBench.v2* and *DeepFund* results (Early 2026):
 2.  **InvestorBench**: Evaluates agents on **Cryptocurrencies** and ETFs.
 3.  **DeepSeek-R1**: Given its dominance in "online tasks" and "numerical calculation" in BizFinBench, it is likely the best raw engine for technical analysis constraints.
 
-## 4. "FinanceArena" Status
-*   No direct endpoint or paper titled simply "FinanceArena" was found in the top citations.
-*   References to **"LMArena"** (Large Model Arena) are common (cited in *LiveTradeBench*).
-*   **DeepFund** explicitly positions itself as a "Live Arena Perspective".
-*   *Interpretation:* The user likely refers to the "DeepFund" live arena or the financial subset of "LMArena".
+## 4. Grok Series & "FinanceArena" Investigation
+*   **"FinanceArena" / FinSearchComp (Sep 2025):** The user likely refers to **FinSearchComp**, which positions itself as a realistic financial search arena.
+    *   **Result:** **Grok 4 (web)** ranked **#1 in the Global subset**, approaching expert-level accuracy.
+    *   **Strength:** Unmatched in **Time-Sensitive Data Fetching** and **Complex Historical Investigation**.
+    *   **Contrast:** DouBao (web) led the Greater China subset.
+*   **Finch Benchmark (Dec 2025):** Evaluating enterprise workflows (spreadsheets, email).
+    *   **Participants:** GPT-5.1, Claude Sonnet 4.5, Gemini 3 Pro, **Grok 4**.
+    *   **Insight:** While GPT-5.1 Pro led (38.4% pass rate), Grok 4 is actively benchmarked in this "frontier" tier for complex, messy accountant-level tasks.
 
-## 5. Recommendation for `cryptotrader`
+## 5. Comparative Analysis: Grok 4 vs. The World
+
+| Feature | **Grok 4** | **DeepSeek-R1** | **GPT-5** |
+| :--- | :--- | :--- | :--- |
+| **Financial Reasoning** | **Top Tier (Search-based)**. Excelled in *FinSearchComp* for retrieving and synthesizing live data. | **Top Tier (Logic-based)**. #1 in *BizFinBench* for numerical calculation and information extraction. | **Top Tier (Knowledge-based)**. #1 in *StockBench* & *BizFinBench* for static QA. |
+| **Trading Utility** | **Fundamental Analysis**. Best for "What caused AAPL to drop?" or seeking macro trends. | **Execution/Tactics**. Best for processing live order book numbers and "online" decision making. | **Strategy Design**. Best for creating the initial trade thesis or coding the strategy. |
+| **Adoption Barriers** | **Latency/Format.** "Web" mode implies higher latency than direct API inference. Strongest in "Chat/Search" rather than "Raw Token Processing". | **Trust/Safety.** Excellent performance but "time travel" tests (DeepFund) show it can still lose money live. | **Cost.** generally highest cost per token for the "Pro" variants needed for complex reasoning. |
+
+## 6. Recommendation for `cryptotrader`
 *   **Primary Reasoning Engine:** **DeepSeek-R1** (via API) seems to be the current "meta" for live/online financial tasks.
+*   **Research/News Agent:** **Grok 4** (if API available) is the recommended "Searcher" agent for fundamental data, replacing standard Google/Bing wrappers.
 *   **Pattern Recognition:** Use established frameworks like **QuantAgent** (separate agents for indicators vs patterns) rather than asking a single LLM to do it all.
 *   **Backtesting Reality Check:** Be extremely wary of backtests. *DeepFund* proves that models profitable in backtests (DeepSeek-V3, Claude-3.7) can lose money live.
