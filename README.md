@@ -134,3 +134,8 @@ nohup python -m market_data.daemon > /var/log/market-data.log 2>&1 &
 ## License
 
 MIT
+
+## Related
+
+- **Research**: [PR #14](https://github.com/m0nklabs/market-data/pull/14) — LLM benchmark research for trading analysis (8 docs covering model selection, cost analysis, prompt strategy, implementation roadmap)
+- **Implementation**: [cryptotrader#205](https://github.com/m0nklabs/cryptotrader/issues/205) — Multi-Brain AI architecture built on this research
