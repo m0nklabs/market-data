@@ -2,35 +2,35 @@
 
 ## TL;DR — Which Model Is Best?
 
-> ⚠️ **Data freshness note:** 
-> - **StockBench** (Oct 2025) does not include GPT-5.2, Claude Opus 4.5, or Gemini 3.0
-> - **FinanceArena** and **Artificial Analysis** are continuously updated and include newer models
-> - For trading performance, we extrapolate from older model versions where newer ones aren't tested
-
 | Use Case | Best Model | Runner-Up | Notes |
 | --- | --- | --- | --- |
-| **Trading/TA (production)** | **Kimi-K2** | Qwen3-235B-Ins | Best StockBench composite score |
-| **Finance reasoning** | **Claude Opus 4** | o3 | Top FinanceArena Elo (1,093) |
-| **Assumption-based analysis** | **o3** | Claude Opus 4 | o3 leads at 21.7% accuracy |
-| **Budget API** | **DeepSeek V3.2** | Gemini 3 Flash | Best $/quality ratio |
-| **Local inference (27GB)** | **Gemma 3 27B Q6_K** | Qwen3-32B Q5_K_M | Fits with KV cache headroom |
-| **Balanced quality/cost** | **Gemini 3 Flash** | Kimi K2.5 | Good scores @ ~$1/M |
+| **Highest intelligence** | **GPT-5.2 (xhigh)** | Claude Opus 4.5 | AA score 51 vs 50 |
+| **Finance reasoning** | **Claude Opus 4.5** | o3 | Top FinanceArena Elo (1,093) |
+| **Trading/TA** | **Kimi-K2** | Qwen3-235B-Ins | Best trading benchmark |
+| **Assumption-based** | **o3** | Claude Opus 4.5 | 21.7% accuracy (highest) |
+| **Budget API** | **DeepSeek V3.2** | Gemini 3 Flash | $0.32/M, score 42 |
+| **Fast + cheap** | **Gemini 3 Flash** | Gemini 3 Pro | 46 score @ $1.13/M, 13 t/s |
+| **Local (27GB)** | **Gemma 3 27B Q6_K** | Qwen3-32B Q5_K_M | Best VRAM fit |
 
 ---
 
 ## Decision Matrix (Detailed)
 
-| Model | Trading (StockBench) | Finance (FinanceArena) | Intelligence | Cost ($/M) | Speed (t/s) | Privacy | Verdict |
+| Model | Intelligence | Finance Elo | Trading | Cost ($/M) | Speed (t/s) | Context | Verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| **Kimi-K2** | 🥇 Rank 1 | Mid | 47 | $1.20 | 0.8 | Low | **Best for trading** |
-| **Claude Opus 4** | 🥉 Rank 7 | 🥇 Elo 1,093 | 50 | $10.00 | 1.7 | Low | **Best for finance reasoning** |
-| **o3** | Rank 5 | 🥇 54.1% overall | 41 | $3.50 | 15 | Low | **Best assumption-based** |
-| GPT-5.2 Pro | Rank 9 | Mid | 51 | $4.81 | 37 | Low | Top intelligence, weak trading |
-| **DeepSeek V3.2** | Rank 8 | Mid | 42 | **$0.32** | 1.3 | Low | **Best budget** |
-| Qwen3-235B-Ins | 🥈 Rank 2 | Low-Mid | 32 | $1.23 | 1.2 | Low | Strong trading |
-| Gemini 3 Flash | N/A | Low | 46 | $1.13 | 13 | Low | Fast, cheap |
-| **Local Gemma 3 27B** | N/A | N/A | ~25 | ~$0.005/run | 15 | 🥇 High | **Best privacy** |
-| **Local Qwen3-32B** | N/A | N/A | ~30 | ~$0.008/run | 12 | 🥇 High | Better reasoning |
+| **GPT-5.2 (xhigh)** | 🥇 51 | Mid | — | $4.81 | 37 | 400K | **Top intelligence** |
+| **Claude Opus 4.5** | 🥈 50 | 🥇 1,093 | — | $10.00 | 1.7 | 200K | **Best finance reasoning** |
+| **Gemini 3 Pro** | 48 | Mid | — | $4.50 | 32 | 1M | Large context |
+| **Kimi-K2.5** | 47 | Mid | — | $1.20 | 0.8 | 256K | Great value |
+| **Gemini 3 Flash** | 46 | Low | — | $1.13 | 13 | 1M | **Fast + cheap** |
+| Claude 4.5 Sonnet | 43 | High | — | $6.00 | 1.2 | 1M | Mid-tier Anthropic |
+| **DeepSeek V3.2** | 42 | Mid | — | **$0.32** | 1.3 | 128K | **Best budget** |
+| **o3** | 41 | 🥇 54.1% | — | $3.50 | 15 | 200K | Best assumption-based |
+| Kimi K2 Thinking | 41 | Mid | — | $1.07 | 0.6 | 256K | Cheap reasoning |
+| **Kimi-K2** | 47 | Mid | 🥇 #1 | $1.20 | 0.8 | 256K | **Best for trading** |
+| Qwen3-235B-Ins | 32 | Low | 🥈 #2 | $1.23 | 1.2 | 256K | Trading runner-up |
+| **Local Gemma 3 27B** | ~25 | — | — | ~$0.005/run | 15 | 128K | **Best privacy** |
+| **Local Qwen3-32B** | ~30 | — | — | ~$0.008/run | 12 | 32K | Better local reasoning |
 
 ---
 
@@ -66,14 +66,19 @@ At >100 runs/day, local inference (Gemma 3 27B on RTX 4090) costs ~$0.006/run vs
 │      • ~$0.01–0.03 per 1000 candles                        │
 │                                                             │
 │  [Complex Trade Decisions]                                  │
-│  └── Kimi-K2 or Qwen3-235B-Ins                              │
-│      • Best StockBench scores                               │
-│      • Use for entry/exit decisions                         │
+│  └── Kimi-K2 or GPT-5.2 (xhigh)                             │
+│      • Kimi-K2: Best trading benchmark                      │
+│      • GPT-5.2: Highest general intelligence (51)           │
 │                                                             │
 │  [Edge Cases & Risk Analysis]                               │
-│  └── Claude Opus 4 or o3                                    │
-│      • Best assumption-based reasoning                      │
-│      • Use sparingly (expensive)                            │
+│  └── Claude Opus 4.5 or o3                                  │
+│      • Best finance reasoning (Elo 1,093)                   │
+│      • o3: Top assumption-based accuracy (21.7%)            │
+│                                                             │
+│  [Fast Prototyping / High Volume]                           │
+│  └── Gemini 3 Flash                                         │
+│      • 46 intelligence @ $1.13/M, 13 t/s                    │
+│      • 1M context for huge analysis sets                    │
 │                                                             │
 │  [Deterministic Validation Layer]                           │
 │  └── Rule-based checks on all LLM outputs                   │
