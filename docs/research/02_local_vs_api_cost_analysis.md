@@ -18,7 +18,7 @@ This document compares API pricing against local inference electricity costs for
 
 **Key insight:** DeepSeek V3.2 is roughly two orders of magnitude cheaper than GPT-5.2 Pro at blended cache-miss rates.
 **Pricing note:** GPT-5.2 Pro pricing reflects the 400k context tier; adjust if a lower tier is used.
-**Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output). For DeepSeek V3.2, the blended number above assumes cache-miss input pricing.
+**Blended cost formula:** Blended $/1M assumes a 3:1 input-to-output ratio (0.75 × input + 0.25 × output). For DeepSeek V3.2, the blended number above assumes cache-miss input pricing. Values are rounded to 2 decimals where applicable.
 
 ---
 
@@ -45,6 +45,8 @@ Assumptions:
 - Total: 45,000 tokens per run.
 
 ### API Cost per Workload
+
+Costs per run below are computed from the **input/output** rates (not the blended column), using the 40k/5k token split.
 
 | Model | Cost per run | Runs per $1 | Notes |
 | --- | --- | --- | --- |
