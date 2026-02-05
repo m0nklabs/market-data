@@ -22,6 +22,8 @@
 | **DeepSeek-R1** | 🥇 High | **#1 Live/Online** | **Best** | ~$0.55 | **Best for Execution** |
 | **Grok 4 (Web)** | 49 | **#1 Search** | Mid | $6.00 | **Top Fundamental/News** |
 | **GPT-5** | 🥇 61.5% Acc | High | Mid | $4.81 | **Top General Intelligence** |
+| **o3-mini** | High | #1 Reasoning | High | $1.10 | **Best Reasoning Value** |
+| **Phi-4 (Finance)** | Mid | N/A | Mid | Local | **Best Laptop Local** |
 | **o3** | High | **#1 Reasoning** | Mid | $3.50 | **Best Risk/Reasoning** |
 | **Claude Opus 4.5** | High | #2 Elo | — | $10.00 | Strong traditional reasoning |
 | **Kimi-K2** | 47 | Mid | #1 StockBench | $1.20 | Good trading baselines |
@@ -79,8 +81,11 @@ At >100 runs/day, local inference (Gemma 3 27B on RTX 4090) costs ~$0.006/run vs
 
 ## Sources Appendix (accessed 2026-02-05)
 
-| Source | Relevance |
-| --- | --- |
-| **BizFinBench.v2** | Leaderboard for Live/Online financial tasks (DeepSeek-R1 wins). |
-| **DeepFund** | Live trading arena demonstrating "backtest vs reality" gap. |
-| **StockBench** | Trading agent profitability benchmarks. |
+| Source | Link | Relevance |
+| --- | --- | --- |
+| **BizFinBench.v2** | [Paper (HuggingFace)](https://hf.co/papers/2601.06401) | #1 Leaderboard for Live/Online financial tasks. |
+| **DeepFund** | [Paper (HuggingFace)](https://hf.co/papers/2505.11065) | Demonstrates the "Backtest vs Reality" gap in live trading. |
+| **StockBench** | [Paper (HuggingFace)](https://hf.co/papers/2510.02209) | Trading agent profitability benchmarks (Stock/Crypto). |
+| **FinSearchComp** | [Paper (HuggingFace)](https://hf.co/papers/2509.13160) | Financial Search & Reasoning (Grok 4 winner). |
+| **QuantAgent** | [Paper (arXiv)](https://arxiv.org/abs/2402.15809) | Price-Driven Multi-Agent LLMs for HFT. |
+| **Microsoft Qlib** | [GitHub Repo](https://github.com/microsoft/qlib) | AI-oriented Quantitative Investment Platform ("bleeding edge" tooling). |
