@@ -8,8 +8,10 @@ Standalone microservice for continuous market data ingestion. Fetches OHLCV cand
 
 - **Historical Backfill**: Fetch and store historical candles from exchanges
 - **Gap Detection & Repair**: Automatically detect and fill missing data
+- **Scheduled Jobs**: Daemon-based scheduling for backfill, gap repair, and updates (see [SCHEDULING.md](docs/SCHEDULING.md))
+- **Real-time Ingestion**: WebSocket streaming from Bitfinex (prevents gaps)
 - **REST API**: Query candles, status, and health (port 8100)
-- **Rate Limit Compliant**: Respects exchange API limits (~40 req/min for Bitfinex)
+- **Rate Limit Compliant**: Respects exchange API limits with exponential backoff
 - **Multi-Exchange**: Pluggable exchange adapters (Bitfinex implemented)
 
 ## Quick Start
@@ -132,14 +134,22 @@ Uses shared PostgreSQL with cryptotrader. Tables:
 
 ## Running as Service
 
+The daemon runs continuously with built-in scheduling for backfill, gap repair, and real-time ingestion.
+
 ```bash
-# Systemd (create service file)
+# Systemd
 sudo systemctl enable market-data
 sudo systemctl start market-data
+sudo systemctl status market-data
+
+# View logs
+journalctl -u market-data -f
 
 # Or with nohup
 nohup python -m market_data.daemon > /var/log/market-data.log 2>&1 &
 ```
+
+See [SCHEDULING.md](docs/SCHEDULING.md) for detailed documentation on scheduled jobs.
 
 ## License
 
